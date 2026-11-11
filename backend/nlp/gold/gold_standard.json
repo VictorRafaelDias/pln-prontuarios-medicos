@@ -1,0 +1,215 @@
+{
+  "version": 1,
+  "description": "10 transcrições FICTÍCIAS anotadas manualmente (gold standard). 'gold' lista apenas o que foi realmente dito; campo ausente = não mencionado. Casos difíceis de propósito: negação, ex-hábito, números por extenso, incerteza, oralidade, abreviações.",
+  "transcripts": [
+    {"id": "G01", "title": "Dor lombar crônica — ex-fumante", "mode": "anamnese", "patient": "Marina Albuquerque",
+     "utterances": [
+       {"speaker": "profissional", "text": "Bom dia, Marina. Então, é... o que te traz aqui hoje?"},
+       {"speaker": "paciente", "text": "Bom dia, doutor. Ai, eu tô com uma dor na lombar, né, tipo assim, uns três meses já."},
+       {"speaker": "profissional", "text": "E como é essa dor?"},
+       {"speaker": "paciente", "text": "É uma dor tipo queimação, às vezes irradia pra perna direita. Eu daria nota oito hoje."},
+       {"speaker": "profissional", "text": "Quando piora?"},
+       {"speaker": "paciente", "text": "Piora de manhã, quando eu acordo, e quando fico muito tempo sentada. Melhora com calor e quando eu caminho."},
+       {"speaker": "profissional", "text": "Você fuma?"},
+       {"speaker": "paciente", "text": "Não fumo mais, parei de fumar há dois anos. Fumava um maço por dia durante vinte anos."},
+       {"speaker": "profissional", "text": "Toma algum remédio?"},
+       {"speaker": "paciente", "text": "Tomo losartana cinquenta miligramas porque tenho pressão alta. Aham."},
+       {"speaker": "profissional", "text": "Alguma alergia?"},
+       {"speaker": "paciente", "text": "Alergia a dipirona."},
+       {"speaker": "profissional", "text": "Faz atividade física?"},
+       {"speaker": "paciente", "text": "Caminho três vezes por semana."},
+       {"speaker": "profissional", "text": "E o sono?"},
+       {"speaker": "paciente", "text": "Durmo mal, acordo várias vezes de madrugada."},
+       {"speaker": "profissional", "text": "Língua pálida com marcas de dentes, pulso fino e fraco. Padrão de deficiência de qi do baço. Vou tonificar o qi do baço. Hoje vou usar E36, BP6, B23 e VB34, com agulhamento, vinte minutos."}
+     ],
+     "gold": {
+       "queixa.descricao": "Dor lombar", "queixa.localizacao": ["lombar", "perna_d"], "queixa.eva": 8, "queixa.inicio": "Há 3 meses",
+       "queixa.tipo_dor": ["queimação", "irradiada"], "queixa.piora": ["Ficar muito tempo sentada"], "queixa.melhora": ["Calor", "Caminhar"],
+       "queixa.horario_pior": "manhã", "habitos.tabagismo": "ex", "habitos.cigarros_dia": 20, "habitos.anos_fumo": 20,
+       "habitos.atividade_fisica": "Caminhada 3x por semana", "habitos.sono": "Durmo mal, acorda várias vezes de madrugada",
+       "saude.medicamentos": ["Losartana 50 mg"], "saude.doencas": ["Hipertensão"], "saude.alergias": ["Dipirona"],
+       "mtc.lingua": "Pálida com marcas de dentes", "mtc.pulso": "Fino e fraco", "mtc.padroes": ["Deficiência de qi do baço"],
+       "mtc.principio": "Tonificar o qi do baço", "soap.p_pontos": ["E36", "BP6", "B23", "VB34"], "soap.p_tempo": 20,
+       "plano.tecnicas": ["sistemica"], "soap.p_tecnica": ["sistemica"]
+     }},
+    {"id": "G02", "title": "Cefaleia — tabagista atual, medo de agulha", "mode": "anamnese", "patient": "João Pedro Siqueira",
+     "utterances": [
+       {"speaker": "profissional", "text": "Boa tarde, João. Qual a sua queixa principal?"},
+       {"speaker": "paciente", "text": "Tenho dor de cabeça quase todo dia, parece enxaqueca. Começou faz uns dois anos."},
+       {"speaker": "profissional", "text": "De zero a dez, qual a intensidade?"},
+       {"speaker": "paciente", "text": "Sete."},
+       {"speaker": "profissional", "text": "É pontada, latejante?"},
+       {"speaker": "paciente", "text": "Latejante, principalmente do lado esquerdo. Piora à noite e com barulho."},
+       {"speaker": "profissional", "text": "Você fuma?"},
+       {"speaker": "paciente", "text": "Fumo, uns dez cigarros por dia, faz doze anos."},
+       {"speaker": "profissional", "text": "E bebida alcoólica?"},
+       {"speaker": "paciente", "text": "Só socialmente, no fim de semana."},
+       {"speaker": "profissional", "text": "Como está o estresse, de zero a dez?"},
+       {"speaker": "paciente", "text": "Nota nove. Trabalho muito, tô bem ansioso."},
+       {"speaker": "profissional", "text": "Tem diabetes ou pressão alta?"},
+       {"speaker": "paciente", "text": "Não, nada disso. Mas tenho muito medo de agulha."},
+       {"speaker": "profissional", "text": "Fique tranquilo, usamos agulhas bem finas. Vamos de auriculoterapia hoje, com sementes."}
+     ],
+     "gold": {
+       "queixa.descricao": "Dor de cabeça", "queixa.localizacao": ["cabeca"], "queixa.eva": 7, "queixa.inicio": "Há 2 anos",
+       "queixa.tipo_dor": ["latejante"], "queixa.horario_pior": "noite", "queixa.piora": ["Barulho"], "secundarias.lista": ["Ansiedade"],
+       "habitos.tabagismo": "atual", "habitos.cigarros_dia": 10, "habitos.anos_fumo": 12, "habitos.etilismo": "social", "habitos.estresse": 9,
+       "contra.diabetes": false, "contra.medo_agulha": true, "plano.tecnicas": ["auriculoterapia"], "soap.p_tecnica": ["auriculoterapia"]
+     }},
+    {"id": "G03", "title": "Cervicalgia na gestação — nega alergia, nunca fumou", "mode": "anamnese", "patient": "Helena Tavares",
+     "utterances": [
+       {"speaker": "profissional", "text": "Olá, Helena. Me conta o que você está sentindo."},
+       {"speaker": "paciente", "text": "Estou com muita tensão no pescoço e nos dois ombros, uma dor que parece um peso."},
+       {"speaker": "profissional", "text": "Desde quando?"},
+       {"speaker": "paciente", "text": "Acho que umas oito semanas atrás."},
+       {"speaker": "profissional", "text": "Você está grávida?"},
+       {"speaker": "paciente", "text": "Estou, de doze semanas."},
+       {"speaker": "profissional", "text": "Alguma alergia?"},
+       {"speaker": "paciente", "text": "Não tenho alergia a nada."},
+       {"speaker": "profissional", "text": "Fuma ou bebe?"},
+       {"speaker": "paciente", "text": "Nunca fumei e não bebo desde que descobri a gravidez."},
+       {"speaker": "profissional", "text": "Como está o sono?"},
+       {"speaker": "paciente", "text": "Péssimo, tenho insônia, acordo às três da manhã."},
+       {"speaker": "profissional", "text": "Hoje vou fazer só auriculoterapia, sem eletroacupuntura, por causa da gestação."}
+     ],
+     "gold": {
+       "queixa.descricao": "Tensão muscular no pescoço e ombros", "queixa.localizacao": ["cervical", "ombro_d", "ombro_e"], "queixa.tipo_dor": ["peso"],
+       "queixa.inicio": "Há 8 semanas", "contra.gestacao": true, "habitos.tabagismo": "nunca", "habitos.etilismo": "ex",
+       "habitos.sono": "Péssimo, insônia, acorda às 3 da manhã", "plano.tecnicas": ["auriculoterapia"], "soap.p_tecnica": ["auriculoterapia"]
+     }},
+    {"id": "G04", "title": "Gonalgia — diabético, marcapasso, etilismo", "mode": "anamnese", "patient": "Carlos Eduardo Lemos",
+     "utterances": [
+       {"speaker": "profissional", "text": "Seu Carlos, qual o motivo da consulta?"},
+       {"speaker": "paciente", "text": "É o joelho direito, doutor. Dói demais para subir escada. Nota sete."},
+       {"speaker": "profissional", "text": "Há quanto tempo?"},
+       {"speaker": "paciente", "text": "Desde 2019, depois de uma queda."},
+       {"speaker": "profissional", "text": "Já fez cirurgia?"},
+       {"speaker": "paciente", "text": "Fiz cirurgia no menisco em 2015 e tirei a vesícula há dez anos."},
+       {"speaker": "profissional", "text": "Tem diabetes, pressão alta?"},
+       {"speaker": "paciente", "text": "Diabetes tipo dois e pressão alta, tomo metformina e losartana."},
+       {"speaker": "profissional", "text": "Usa marcapasso ou anticoagulante?"},
+       {"speaker": "paciente", "text": "Marcapasso eu tenho, anticoagulante não."},
+       {"speaker": "profissional", "text": "Bebe?"},
+       {"speaker": "paciente", "text": "Bebo cerveja todo dia, umas duas latas."},
+       {"speaker": "profissional", "text": "Língua vermelha com saburra amarela, pulso escorregadio e rápido. Umidade-calor. Vou drenar umidade e eliminar calor. Pontos IG11, BP9 e E36, eletroacupuntura, trinta minutos."}
+     ],
+     "gold": {
+       "queixa.descricao": "Dor no joelho direito", "queixa.localizacao": ["joelho_d"], "queixa.eva": 7, "queixa.inicio": "Desde 2019",
+       "saude.cirurgias": ["Cirurgia de menisco (2015)", "Colecistectomia (há 10 anos)"], "saude.doencas": ["Diabetes", "Hipertensão"],
+       "saude.medicamentos": ["Metformina", "Losartana"], "contra.diabetes": true, "contra.marcapasso": true, "contra.anticoagulantes": false,
+       "habitos.etilismo": "frequente", "mtc.lingua": "Vermelha com saburra amarela", "mtc.pulso": "Escorregadio e rápido",
+       "mtc.padroes": ["Umidade-calor"], "mtc.principio": "Drenar umidade e eliminar calor", "soap.p_pontos": ["IG11", "BP9", "E36"],
+       "plano.tecnicas": ["eletroacupuntura"], "soap.p_tecnica": ["eletroacupuntura"], "soap.p_tempo": 30
+     }},
+    {"id": "G05", "title": "Ansiedade, TPM, intestino preso — alergia a látex", "mode": "anamnese", "patient": "Beatriz Nogueira",
+     "utterances": [
+       {"speaker": "profissional", "text": "Oi Beatriz, como posso te ajudar?"},
+       {"speaker": "paciente", "text": "Eu tô muito ansiosa, não consigo dormir direito e minha TPM é horrível. Cólica menstrual forte todo mês."},
+       {"speaker": "profissional", "text": "Há quanto tempo isso?"},
+       {"speaker": "paciente", "text": "Há mais de um ano."},
+       {"speaker": "profissional", "text": "De zero a dez, o estresse?"},
+       {"speaker": "paciente", "text": "Oito."},
+       {"speaker": "profissional", "text": "E o intestino?"},
+       {"speaker": "paciente", "text": "Prisão de ventre, vou ao banheiro de três em três dias."},
+       {"speaker": "profissional", "text": "Cirurgias?"},
+       {"speaker": "paciente", "text": "Fiz cesárea em dois mil e dezoito."},
+       {"speaker": "profissional", "text": "Alergias?"},
+       {"speaker": "paciente", "text": "Tenho alergia a látex."},
+       {"speaker": "profissional", "text": "Histórico na família?"},
+       {"speaker": "paciente", "text": "Meu pai teve infarto aos cinquenta anos."},
+       {"speaker": "profissional", "text": "Tem medo de agulha?"},
+       {"speaker": "paciente", "text": "Um pouco, mas consigo."}
+     ],
+     "gold": {
+       "queixa.descricao": "Ansiedade", "secundarias.lista": ["TPM", "Cólica menstrual"], "queixa.inicio": "Há mais de 1 ano", "habitos.estresse": 8,
+       "habitos.sono": "Não consegue dormir direito", "habitos.intestino": "Prisão de ventre, vai ao banheiro de 3 em 3 dias",
+       "saude.cirurgias": ["Cesárea (2018)"], "saude.alergias": ["Látex"], "saude.hist_familiar": ["Pai: infarto"], "contra.medo_agulha": true,
+       "saude.ciclo": "TPM e cólica menstrual forte todo mês"
+     }},
+    {"id": "G06", "title": "SOAP — lombalgia em melhora", "mode": "soap", "patient": "Marina Albuquerque",
+     "previous": {"eva": 8},
+     "utterances": [
+       {"speaker": "paciente", "text": "Doutor, melhorou bastante. A dor lombar caiu pra nota três."},
+       {"speaker": "profissional", "text": "Que bom. E o sono?"},
+       {"speaker": "paciente", "text": "Ainda acordo de madrugada, mas a perna não formiga mais."},
+       {"speaker": "profissional", "text": "Língua menos pálida, pulso fino. Palpação com tensão no quadrado lombar. Padrão de deficiência de qi do baço com estagnação de qi."},
+       {"speaker": "profissional", "text": "Hoje vou usar B23, B25, VB30, E36 e BP6 com moxabustão, vinte minutos."},
+       {"speaker": "paciente", "text": "Pode ser."},
+       {"speaker": "profissional", "text": "Sem reações durante a sessão. Oriento evitar ficar muito tempo sentada e fazer alongamento diário. Retorno em uma semana."}
+     ],
+     "gold": {
+       "soap.s_relato": "Melhorou bastante. A dor lombar caiu para nota 3.", "soap.s_eva": 3, "soap.o_lingua": "Menos pálida", "soap.o_pulso": "Fino",
+       "soap.o_obs": "Palpação com tensão no quadrado lombar", "soap.a_evolucao": "Melhora relatada pelo paciente",
+       "soap.a_padrao": "Deficiência de qi do baço; estagnação de qi", "soap.p_pontos": ["B23", "B25", "VB30", "E36", "BP6"],
+       "soap.p_tecnica": ["moxabustao"], "soap.p_tempo": 20, "soap.p_reacoes": "Sem reações adversas",
+       "soap.p_orientacoes": "Evitar ficar muito tempo sentada e fazer alongamento diário", "soap.p_proxima": "Retorno em 1 semana"
+     }},
+    {"id": "G07", "title": "SOAP — cefaleia estável, tontura pós-sessão", "mode": "soap", "patient": "João Pedro Siqueira",
+     "previous": {"eva": 7},
+     "utterances": [
+       {"speaker": "paciente", "text": "A dor de cabeça continua igual, nota seis. Ontem tive um pouco de tontura depois da sessão."},
+       {"speaker": "profissional", "text": "Vamos de eletroacupuntura hoje com VG20, VB20, TA5 e IG4, por 25 minutos. Língua vermelha, pulso em corda. Ascensão do yang do fígado."},
+       {"speaker": "profissional", "text": "Beba bastante água e evite café à tarde. Volte daqui a duas semanas."}
+     ],
+     "gold": {
+       "soap.s_relato": "A dor de cabeça continua igual, nota 6. Ontem tive um pouco de tontura depois da sessão", "soap.s_eva": 6,
+       "soap.a_evolucao": "Quadro estável, sem mudança relatada", "soap.o_lingua": "Vermelha", "soap.o_pulso": "Em corda",
+       "soap.a_padrao": "Ascensão do yang do fígado", "soap.p_pontos": ["VG20", "VB20", "TA5", "IG4"], "soap.p_tecnica": ["eletroacupuntura"],
+       "soap.p_tempo": 25, "soap.p_reacoes": "Tontura após a sessão", "soap.p_orientacoes": "Beba bastante água e evite café à tarde",
+       "soap.p_proxima": "Volte daqui a 2 semanas"
+     }},
+    {"id": "G08", "title": "SOAP — gestante com enjoo", "mode": "soap", "patient": "Helena Tavares",
+     "previous": {"eva": 6},
+     "utterances": [
+       {"speaker": "paciente", "text": "Os ombros estão bem melhores, nota quatro. Continuo grávida de quinze semanas e com enjoo de manhã."},
+       {"speaker": "profissional", "text": "Entendi. Hoje só auriculoterapia com sementes. Língua rosada com saburra fina, pulso escorregadio."},
+       {"speaker": "profissional", "text": "Oriento manter repouso e hidratação. Próxima sessão na semana que vem."}
+     ],
+     "gold": {
+       "soap.s_relato": "Os ombros estão bem melhores, nota 4. Continuo grávida de 15 semanas e com enjoo de manhã", "soap.s_eva": 4,
+       "soap.a_evolucao": "Melhora relatada pelo paciente", "contra.gestacao": true, "soap.o_lingua": "Rosada com saburra fina",
+       "soap.o_pulso": "Escorregadio", "soap.p_tecnica": ["auriculoterapia"], "soap.p_orientacoes": "Oriento manter repouso e hidratação",
+       "soap.p_proxima": "Próxima sessão na semana que vem"
+     }},
+    {"id": "G09", "title": "Texto cheio de abreviações e oralidade", "mode": "anamnese", "patient": "Paulo (fictício)",
+     "utterances": [
+       {"speaker": "profissional", "text": "Qual o problema?"},
+       {"speaker": "paciente", "text": "vc sabe q eu tenho HAS e DM né, mas hj o problema é o ombro esquerdo, dói mto quando levanto o braço. dor 7 de 10"},
+       {"speaker": "profissional", "text": "Desde quando?"},
+       {"speaker": "paciente", "text": "ah faz uns seis meses, depois que caí da bicicleta"},
+       {"speaker": "profissional", "text": "Algum remédio?"},
+       {"speaker": "paciente", "text": "só ibuprofeno quando dói, tomo uns dois por dia"},
+       {"speaker": "profissional", "text": "Fuma?"},
+       {"speaker": "paciente", "text": "nunca fumei, nem bebo"},
+       {"speaker": "profissional", "text": "E exercício?"},
+       {"speaker": "paciente", "text": "sou sedentário, não faço nada"},
+       {"speaker": "profissional", "text": "Língua rosada, pulso tenso. Estagnação de qi. Vou mover o qi e ativar o sangue. Vou usar ventosas e IG15, TA14, ID11 com agulhamento por vinte minutos."}
+     ],
+     "gold": {
+       "queixa.descricao": "Dor no ombro esquerdo", "queixa.localizacao": ["ombro_e"], "queixa.eva": 7, "queixa.inicio": "Há 6 meses",
+       "saude.doencas": ["Hipertensão", "Diabetes"], "contra.diabetes": true, "saude.medicamentos": ["Ibuprofeno"], "habitos.tabagismo": "nunca",
+       "habitos.etilismo": "nunca", "habitos.atividade_fisica": "Sedentário", "mtc.lingua": "Rosada", "mtc.pulso": "Tenso",
+       "mtc.padroes": ["Estagnação de qi"], "mtc.principio": "Mover o qi e ativar o sangue", "soap.p_pontos": ["IG15", "TA14", "ID11"],
+       "plano.tecnicas": ["ventosa", "sistemica"], "soap.p_tecnica": ["ventosa", "sistemica"], "soap.p_tempo": 20
+     }},
+    {"id": "G10", "title": "Incerteza, negações e menopausa", "mode": "anamnese", "patient": "Lúcia (fictícia)",
+     "utterances": [
+       {"speaker": "profissional", "text": "Dona Lúcia, o que a traz aqui?"},
+       {"speaker": "paciente", "text": "Ah, eu acho que é a coluna, talvez uma hérnia de disco, tenho dor nas costas e formigamento na perna esquerda."},
+       {"speaker": "profissional", "text": "Intensidade?"},
+       {"speaker": "paciente", "text": "Mais ou menos seis."},
+       {"speaker": "profissional", "text": "Você tem diabetes?"},
+       {"speaker": "paciente", "text": "Não, graças a Deus. Mas minha irmã tem."},
+       {"speaker": "profissional", "text": "Está grávida ou pode estar?"},
+       {"speaker": "paciente", "text": "Não, já passei da menopausa."},
+       {"speaker": "profissional", "text": "Usa marca-passo?"},
+       {"speaker": "paciente", "text": "Uso sim, faz cinco anos."},
+       {"speaker": "profissional", "text": "Os pontos serão VB34, F3 e B23. Vou usar também moxa."}
+     ],
+     "gold": {
+       "queixa.descricao": "Dor nas costas", "queixa.localizacao": ["lombar", "perna_e"], "queixa.tipo_dor": ["formigamento"], "queixa.eva": 6,
+       "contra.diabetes": false, "contra.gestacao": false, "contra.marcapasso": true, "saude.hist_familiar": ["Irmã: diabetes"],
+       "saude.ciclo": "Já passou da menopausa", "soap.p_pontos": ["VB34", "F3", "B23"], "plano.tecnicas": ["moxabustao"], "soap.p_tecnica": ["moxabustao"]
+     }}
+  ]
+}

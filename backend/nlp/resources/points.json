@@ -1,0 +1,33 @@
+{
+  "_doc": "Catálogo de pontos de acupuntura (nomenclatura brasileira: P, IG, E, BP, C, ID, B, R, PC, TA, VB, F, VC, VG). 'meridianos' dá o nº de pontos de cada canal para validar códigos. 'pontos' é um subconjunto de uso frequente, usado na busca do formulário e como dicionário de nomes (pinyin).",
+  "meridianos": {
+    "P": {"nome": "Pulmão", "n": 11}, "IG": {"nome": "Intestino Grosso", "n": 20}, "E": {"nome": "Estômago", "n": 45},
+    "BP": {"nome": "Baço-Pâncreas", "n": 21}, "C": {"nome": "Coração", "n": 9}, "ID": {"nome": "Intestino Delgado", "n": 19},
+    "B": {"nome": "Bexiga", "n": 67}, "R": {"nome": "Rim", "n": 27}, "PC": {"nome": "Pericárdio", "n": 9},
+    "TA": {"nome": "Triplo Aquecedor", "n": 23}, "VB": {"nome": "Vesícula Biliar", "n": 44}, "F": {"nome": "Fígado", "n": 14},
+    "VC": {"nome": "Vaso Concepção", "n": 24}, "VG": {"nome": "Vaso Governador", "n": 28}
+  },
+  "pontos": [
+    {"code": "P1", "nome": "Zhongfu"}, {"code": "P5", "nome": "Chize"}, {"code": "P7", "nome": "Lieque"}, {"code": "P9", "nome": "Taiyuan"}, {"code": "P10", "nome": "Yuji"}, {"code": "P11", "nome": "Shaoshang"},
+    {"code": "IG4", "nome": "Hegu"}, {"code": "IG10", "nome": "Shousanli"}, {"code": "IG11", "nome": "Quchi"}, {"code": "IG15", "nome": "Jianyu"}, {"code": "IG20", "nome": "Yingxiang"},
+    {"code": "E2", "nome": "Sibai"}, {"code": "E3", "nome": "Juliao"}, {"code": "E4", "nome": "Dicang"}, {"code": "E6", "nome": "Jiache"}, {"code": "E7", "nome": "Xiaguan"}, {"code": "E8", "nome": "Touwei"},
+    {"code": "E21", "nome": "Liangmen"}, {"code": "E25", "nome": "Tianshu"}, {"code": "E34", "nome": "Liangqiu"}, {"code": "E35", "nome": "Dubi"}, {"code": "E36", "nome": "Zusanli"},
+    {"code": "E37", "nome": "Shangjuxu"}, {"code": "E40", "nome": "Fenglong"}, {"code": "E41", "nome": "Jiexi"}, {"code": "E44", "nome": "Neiting"},
+    {"code": "BP3", "nome": "Taibai"}, {"code": "BP4", "nome": "Gongsun"}, {"code": "BP6", "nome": "Sanyinjiao"}, {"code": "BP8", "nome": "Diji"}, {"code": "BP9", "nome": "Yinlingquan"}, {"code": "BP10", "nome": "Xuehai"}, {"code": "BP15", "nome": "Daheng"},
+    {"code": "C3", "nome": "Shaohai"}, {"code": "C5", "nome": "Tongli"}, {"code": "C7", "nome": "Shenmen"},
+    {"code": "ID3", "nome": "Houxi"}, {"code": "ID6", "nome": "Yanglao"}, {"code": "ID11", "nome": "Tianzong"}, {"code": "ID18", "nome": "Quanliao"}, {"code": "ID19", "nome": "Tinggong"},
+    {"code": "B10", "nome": "Tianzhu"}, {"code": "B11", "nome": "Dashu"}, {"code": "B13", "nome": "Feishu"}, {"code": "B15", "nome": "Xinshu"}, {"code": "B17", "nome": "Geshu"}, {"code": "B18", "nome": "Ganshu"},
+    {"code": "B20", "nome": "Pishu"}, {"code": "B21", "nome": "Weishu"}, {"code": "B23", "nome": "Shenshu"}, {"code": "B25", "nome": "Dachangshu"}, {"code": "B40", "nome": "Weizhong"},
+    {"code": "B54", "nome": "Zhibian"}, {"code": "B57", "nome": "Chengshan"}, {"code": "B60", "nome": "Kunlun"}, {"code": "B62", "nome": "Shenmai"}, {"code": "B67", "nome": "Zhiyin"},
+    {"code": "R1", "nome": "Yongquan"}, {"code": "R3", "nome": "Taixi"}, {"code": "R6", "nome": "Zhaohai"}, {"code": "R7", "nome": "Fuliu"}, {"code": "R10", "nome": "Yingu"},
+    {"code": "PC3", "nome": "Quze"}, {"code": "PC6", "nome": "Neiguan"}, {"code": "PC7", "nome": "Daling"}, {"code": "PC8", "nome": "Laogong"},
+    {"code": "TA3", "nome": "Zhongzhu"}, {"code": "TA5", "nome": "Waiguan"}, {"code": "TA14", "nome": "Jianliao"}, {"code": "TA17", "nome": "Yifeng"}, {"code": "TA23", "nome": "Sizhukong"},
+    {"code": "VB1", "nome": "Tongziliao"}, {"code": "VB8", "nome": "Shuaigu"}, {"code": "VB14", "nome": "Yangbai"}, {"code": "VB20", "nome": "Fengchi"}, {"code": "VB21", "nome": "Jianjing"},
+    {"code": "VB30", "nome": "Huantiao"}, {"code": "VB31", "nome": "Fengshi"}, {"code": "VB34", "nome": "Yanglingquan"}, {"code": "VB39", "nome": "Xuanzhong"}, {"code": "VB40", "nome": "Qiuxu"}, {"code": "VB41", "nome": "Zulinqi"},
+    {"code": "F2", "nome": "Xingjian"}, {"code": "F3", "nome": "Taichong"}, {"code": "F8", "nome": "Ququan"}, {"code": "F13", "nome": "Zhangmen"}, {"code": "F14", "nome": "Qimen"},
+    {"code": "VC3", "nome": "Zhongji"}, {"code": "VC4", "nome": "Guanyuan"}, {"code": "VC6", "nome": "Qihai"}, {"code": "VC12", "nome": "Zhongwan"}, {"code": "VC17", "nome": "Shanzhong"}, {"code": "VC22", "nome": "Tiantu"}, {"code": "VC24", "nome": "Chengjiang"},
+    {"code": "VG4", "nome": "Mingmen"}, {"code": "VG14", "nome": "Dazhui"}, {"code": "VG16", "nome": "Fengfu"}, {"code": "VG20", "nome": "Baihui"}, {"code": "VG24", "nome": "Shenting"}, {"code": "VG26", "nome": "Renzhong"},
+    {"code": "EX-HN3", "nome": "Yintang"}, {"code": "EX-HN5", "nome": "Taiyang"}, {"code": "EX-HN1", "nome": "Sishencong"}, {"code": "EX-HN22", "nome": "Anmian"},
+    {"code": "AURIC-SHENMEN", "nome": "Shenmen auricular"}
+  ]
+}

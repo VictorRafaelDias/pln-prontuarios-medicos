@@ -1,0 +1,17 @@
+{
+  "label": "TIPO_DOR",
+  "description": "Qualidade/caráter da dor. attrs.opcao = valor da lista 'Tipo de dor' do formulário.",
+  "entries": [
+    {"canonical": "pontada", "variants": ["pontada", "fisgada", "agulhada", "pontadas", "fisgadas"], "attrs": {"opcao": "pontada"}},
+    {"canonical": "queimação", "variants": ["queimação", "queima", "queimando", "ardência", "ardor", "ardendo", "ardida"], "attrs": {"opcao": "queimação"}},
+    {"canonical": "latejante", "variants": ["latejante", "latejando", "pulsátil", "pulsando", "latejamento", "lateja"], "attrs": {"opcao": "latejante"}},
+    {"canonical": "peso", "variants": ["pesada", "pesado", "sensação de peso", "peso nos ombros", "peso na cabeça", "peso nas costas", "peso nas pernas"], "attrs": {"opcao": "peso"}},
+    {"canonical": "aperto", "variants": ["aperto", "apertada", "apertado", "sensação de pressão", "em faixa", "opressiva", "apertando"], "attrs": {"opcao": "aperto"}},
+    {"canonical": "choque", "variants": ["choque", "descarga elétrica", "eletricidade", "elétrica", "choquinho"], "attrs": {"opcao": "choque"}},
+    {"canonical": "cólica", "variants": ["cólica"], "attrs": {"opcao": "cólica"}},
+    {"canonical": "formigamento", "variants": ["formigamento", "formigando", "formigas", "parestesia"], "attrs": {"opcao": "formigamento"}},
+    {"canonical": "dormência", "variants": ["dormência", "dormente", "adormecida", "adormecido", "anestesiada"], "attrs": {"opcao": "dormência"}},
+    {"canonical": "irradiada", "variants": ["irradiando", "irradia", "irradiada", "irradiação", "desce pela perna", "desce para a perna", "desce pelo braço", "desce até o pé"], "attrs": {"opcao": "irradiada"}},
+    {"canonical": "surda", "variants": ["dor surda", "surda", "dor constante"], "attrs": {"opcao": "surda"}}
+  ]
+}

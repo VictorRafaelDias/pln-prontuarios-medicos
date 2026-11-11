@@ -1,0 +1,29 @@
+{
+  "_doc": "Normalização de texto oral. 'ellipsis_hesitations': hesitações marcadas com reticências (ex.: 'é...', 'ahn...'). 'interjections': interjeições soltas. 'filler_regex': expressões regulares de muletas ('tipo', 'né'). 'leading_markers': marcadores de discurso no início da fala. 'abbreviations': expansão de abreviações (chave exata, sensível a maiúsculas quando 'case_sensitive').",
+  "ellipsis_hesitations": ["é", "eh", "ah", "ahn", "hum", "hm", "hmm", "uh", "ãh", "ã", "éé", "ééé", "então", "tipo", "assim", "aí", "bom", "olha"],
+  "interjections": ["ahn", "ãhn", "hum", "hmm", "hm", "uh", "uhm", "éh", "ééé", "éé", "eh", "ah", "aa"],
+  "affirmatives_kept_as_sim": ["aham", "uhum", "ahã", "uhã"],
+  "filler_regex": [
+    "\\btipo\\b(?!\\s+(?:de|do|da|dos|das|sangu[ií]neo|[0-9]))\\s*(?:assim\\b)?",
+    "\\b(?:né|nê)\\b\\s*[?]?",
+    ",?\\s*\\b(?:sabe|entende|entendeu|viu)\\b\\s*\\?"
+  ],
+  "leading_markers": ["então", "aí", "daí", "bom", "olha", "olhe", "ó", "bem", "é", "assim", "veja", "pois", "ok", "tá", "tá bom", "certo", "ótimo", "perfeito"],
+  "stutter_words": ["eu", "a", "o", "de", "que", "e", "é", "tá", "me", "se", "na", "no", "um", "uma", "já", "não", "tô", "to", "com", "pra", "para", "dor", "só"],
+  "abbreviations": {
+    "tô": "estou", "to": "estou", "tá": "está", "pra": "para", "pro": "para o", "cê": "você", "ce": "você",
+    "vc": "você", "vcs": "vocês", "pq": "porque", "tb": "também", "tbm": "também", "hj": "hoje", "mto": "muito",
+    "mt": "muito", "mta": "muita", "dps": "depois", "msm": "mesmo", "q": "que", "nd": "nada", "td": "tudo", "tds": "todos",
+    "p/": "para", "c/": "com", "s/": "sem", "dr.": "doutor", "dra.": "doutora", "sr.": "senhor", "sra.": "senhora",
+    "min": "minutos", "seg": "segundos", "qd": "quando", "fds": "fim de semana", "cx": "caixa"
+  },
+  "case_sensitive_abbreviations": {
+    "HAS": "hipertensão arterial sistêmica",
+    "DM": "diabetes mellitus",
+    "DM2": "diabetes mellitus tipo 2",
+    "DRGE": "doença do refluxo gastroesofágico",
+    "TPM": "TPM",
+    "AAS": "AAS",
+    "IMC": "índice de massa corporal"
+  }
+}

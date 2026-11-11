@@ -1,0 +1,11 @@
+{
+  "label": "TECNICA",
+  "description": "Técnicas terapêuticas. attrs.opcao = valor da lista de técnicas do formulário (sistemica, auriculoterapia, eletroacupuntura, moxabustao, ventosa).",
+  "entries": [
+    {"canonical": "acupuntura sistêmica", "variants": ["acupuntura sistêmica", "acupuntura corporal", "agulhamento sistêmico", "agulhamento", "acupuntura tradicional"], "attrs": {"opcao": "sistemica"}},
+    {"canonical": "auriculoterapia", "variants": ["auriculoterapia", "acupuntura auricular", "sementes", "sementinha", "esferas de cristal", "agulha semipermanente", "semipermanente", "auricular"], "attrs": {"opcao": "auriculoterapia"}},
+    {"canonical": "eletroacupuntura", "variants": ["eletroacupuntura", "eletroestimulação", "estimulação elétrica", "estimulador elétrico", "eletro"], "attrs": {"opcao": "eletroacupuntura"}},
+    {"canonical": "moxabustão", "variants": ["moxabustão", "moxa", "moxar", "bastão de artemísia", "artemísia"], "attrs": {"opcao": "moxabustao"}},
+    {"canonical": "ventosa", "variants": ["ventosa", "ventosaterapia", "cupping", "ventosas"], "attrs": {"opcao": "ventosa"}}
+  ]
+}

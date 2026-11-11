@@ -1,0 +1,12 @@
+{
+  "label": "CONDICAO",
+  "description": "Condições relevantes para contraindicações da acupuntura. attrs.contra = id do campo contra.* acionado.",
+  "entries": [
+    {"canonical": "gestação", "variants": ["grávida", "gestante", "gestação", "gravidez", "grávido", "semanas de gestação", "semanas de gravidez"], "attrs": {"contra": "gestacao"}},
+    {"canonical": "uso de anticoagulante", "variants": ["anticoagulante", "afina o sangue", "afinar o sangue", "remédio para afinar o sangue", "sangue fino", "antiagregante"], "attrs": {"contra": "anticoagulantes"}},
+    {"canonical": "marcapasso", "variants": ["marcapasso", "marca-passo", "marca passo", "cardiodesfibrilador", "desfibrilador implantado"], "attrs": {"contra": "marcapasso"}},
+    {"canonical": "distúrbio de coagulação", "variants": ["distúrbio de coagulação", "problema de coagulação", "problema de sangramento", "sangramento fácil", "sangro com facilidade", "hematomas com facilidade", "coagulação"], "attrs": {"contra": "coagulacao"}},
+    {"canonical": "medo de agulha", "variants": ["medo de agulha", "medo de agulhas", "fobia de agulha", "fobia de agulhas", "pavor de agulha", "pavor de agulhas", "medo de injeção", "medo de picada", "trypanofobia", "aflição com agulha"], "attrs": {"contra": "medo_agulha"}},
+    {"canonical": "lesão de pele", "variants": ["lesão de pele", "lesões de pele", "ferida", "infecção de pele", "lesão cutânea", "lesões cutâneas", "queimadura", "pele lesionada", "ferida aberta", "úlcera de pele"], "attrs": {"contra": "lesoes_pele"}}
+  ]
+}

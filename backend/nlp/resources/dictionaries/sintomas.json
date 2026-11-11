@@ -1,0 +1,441 @@
+{
+  "label": "SINTOMA",
+  "description": "Sintomas e queixas. attrs.tema agrupa o assunto (dor, sono, energia, emocional, digestivo...). attrs.regiao = região do corpo implícita no termo.",
+  "entries": [
+    {
+      "canonical": "dor",
+      "variants": [
+        "dor",
+        "dói",
+        "doendo",
+        "doeu",
+        "doía",
+        "doer",
+        "dolorido",
+        "dolorida",
+        "doloroso",
+        "dolorosa"
+      ],
+      "attrs": {
+        "tema": "dor"
+      }
+    },
+    {
+      "canonical": "dor de cabeça",
+      "variants": [
+        "dor de cabeça",
+        "cefaleia",
+        "dor na cabeça"
+      ],
+      "attrs": {
+        "tema": "dor",
+        "regiao": [
+          "cabeca"
+        ]
+      }
+    },
+    {
+      "canonical": "enxaqueca",
+      "variants": [
+        "enxaqueca"
+      ],
+      "attrs": {
+        "tema": "dor",
+        "regiao": [
+          "cabeca"
+        ]
+      }
+    },
+    {
+      "canonical": "lombalgia",
+      "variants": [
+        "lombalgia",
+        "dor lombar",
+        "dor nas costas"
+      ],
+      "attrs": {
+        "tema": "dor",
+        "regiao": [
+          "lombar"
+        ]
+      }
+    },
+    {
+      "canonical": "cervicalgia",
+      "variants": [
+        "cervicalgia",
+        "dor cervical",
+        "dor no pescoço"
+      ],
+      "attrs": {
+        "tema": "dor",
+        "regiao": [
+          "cervical"
+        ]
+      }
+    },
+    {
+      "canonical": "ciatalgia",
+      "variants": [
+        "ciática",
+        "ciatalgia",
+        "dor ciática"
+      ],
+      "attrs": {
+        "tema": "dor",
+        "regiao": [
+          "lombar",
+          "gluteo_d",
+          "perna_d"
+        ]
+      }
+    },
+    {
+      "canonical": "insônia",
+      "variants": [
+        "insônia",
+        "dificuldade para dormir",
+        "dificuldade de dormir",
+        "não consigo dormir",
+        "durmo mal",
+        "dormir mal",
+        "sono ruim",
+        "sono leve",
+        "sono agitado",
+        "acordo de madrugada",
+        "acordo várias vezes",
+        "acordo muito cansado",
+        "acordo cansado",
+        "demoro para dormir",
+        "demoro a dormir"
+      ],
+      "attrs": {
+        "tema": "sono"
+      }
+    },
+    {
+      "canonical": "cansaço",
+      "variants": [
+        "cansaço",
+        "cansado",
+        "cansada",
+        "fadiga",
+        "exausto",
+        "exausta",
+        "sem energia",
+        "sem disposição",
+        "falta de energia",
+        "fraqueza",
+        "indisposição",
+        "indisposto",
+        "indisposta"
+      ],
+      "attrs": {
+        "tema": "energia"
+      }
+    },
+    {
+      "canonical": "ansiedade",
+      "variants": [
+        "ansiedade",
+        "ansioso",
+        "ansiosa",
+        "nervosismo",
+        "aflição",
+        "agitação",
+        "agitado",
+        "agitada"
+      ],
+      "attrs": {
+        "tema": "emocional"
+      }
+    },
+    {
+      "canonical": "estresse",
+      "variants": [
+        "estresse",
+        "stress",
+        "estressado",
+        "estressada",
+        "sobrecarregado",
+        "sobrecarregada",
+        "sobrecarga"
+      ],
+      "attrs": {
+        "tema": "estresse"
+      }
+    },
+    {
+      "canonical": "irritabilidade",
+      "variants": [
+        "irritabilidade",
+        "irritado",
+        "irritada",
+        "impaciente",
+        "estourado"
+      ],
+      "attrs": {
+        "tema": "emocional"
+      }
+    },
+    {
+      "canonical": "tristeza",
+      "variants": [
+        "tristeza",
+        "desânimo",
+        "desanimado",
+        "desanimada",
+        "choro fácil",
+        "choro com facilidade"
+      ],
+      "attrs": {
+        "tema": "emocional"
+      }
+    },
+    {
+      "canonical": "tontura",
+      "variants": [
+        "tontura",
+        "tonteira",
+        "vertigem",
+        "tonto",
+        "tonta"
+      ],
+      "attrs": {
+        "tema": "neuro"
+      }
+    },
+    {
+      "canonical": "náusea",
+      "variants": [
+        "náusea",
+        "enjoo",
+        "enjoado",
+        "enjoada",
+        "vômito",
+        "vomito"
+      ],
+      "attrs": {
+        "tema": "digestivo"
+      }
+    },
+    {
+      "canonical": "azia",
+      "variants": [
+        "azia",
+        "queimação no estômago",
+        "má digestão",
+        "empachamento",
+        "gases",
+        "estufamento",
+        "inchaço abdominal",
+        "barriga inchada",
+        "digestão lenta"
+      ],
+      "attrs": {
+        "tema": "digestivo"
+      }
+    },
+    {
+      "canonical": "constipação",
+      "variants": [
+        "prisão de ventre",
+        "intestino preso",
+        "constipação",
+        "constipado",
+        "constipada",
+        "intestino travado",
+        "intestino preguiçoso"
+      ],
+      "attrs": {
+        "tema": "intestino"
+      }
+    },
+    {
+      "canonical": "diarreia",
+      "variants": [
+        "diarreia",
+        "intestino solto",
+        "fezes líquidas",
+        "fezes moles"
+      ],
+      "attrs": {
+        "tema": "intestino"
+      }
+    },
+    {
+      "canonical": "alteração urinária",
+      "variants": [
+        "urina escura",
+        "urinar muito",
+        "urgência urinária",
+        "noctúria",
+        "ardência ao urinar",
+        "urina forte",
+        "urino pouco",
+        "urino muito"
+      ],
+      "attrs": {
+        "tema": "urina"
+      }
+    },
+    {
+      "canonical": "tensão muscular",
+      "variants": [
+        "rigidez",
+        "tensão muscular",
+        "contratura",
+        "músculo travado",
+        "travado",
+        "travada",
+        "nó muscular",
+        "tensão",
+        "tenso",
+        "tensa",
+        "músculos tensos"
+      ],
+      "attrs": {
+        "tema": "musculo"
+      }
+    },
+    {
+      "canonical": "inchaço",
+      "variants": [
+        "inchaço",
+        "edema",
+        "inchado",
+        "inchada",
+        "retenção de líquido",
+        "retenção de líquidos"
+      ],
+      "attrs": {
+        "tema": "edema"
+      }
+    },
+    {
+      "canonical": "ondas de calor",
+      "variants": [
+        "fogachos",
+        "calorão",
+        "ondas de calor",
+        "suor noturno",
+        "suores noturnos",
+        "sudorese",
+        "suor excessivo"
+      ],
+      "attrs": {
+        "tema": "termico"
+      }
+    },
+    {
+      "canonical": "frio nas extremidades",
+      "variants": [
+        "mãos frias",
+        "pés frios",
+        "frio nas extremidades",
+        "friorento",
+        "friorenta",
+        "sensação de frio"
+      ],
+      "attrs": {
+        "tema": "termico"
+      }
+    },
+    {
+      "canonical": "zumbido",
+      "variants": [
+        "zumbido"
+      ],
+      "attrs": {
+        "tema": "neuro"
+      }
+    },
+    {
+      "canonical": "falta de ar",
+      "variants": [
+        "falta de ar",
+        "dificuldade para respirar",
+        "chiado no peito"
+      ],
+      "attrs": {
+        "tema": "respiratorio"
+      }
+    },
+    {
+      "canonical": "palpitação",
+      "variants": [
+        "palpitação",
+        "coração disparado",
+        "taquicardia"
+      ],
+      "attrs": {
+        "tema": "cardio"
+      }
+    },
+    {
+      "canonical": "sintoma menstrual",
+      "variants": [
+        "TPM",
+        "cólica menstrual",
+        "menstruação irregular",
+        "fluxo intenso",
+        "menstruação atrasada",
+        "menstruação desregulada",
+        "dor menstrual"
+      ],
+      "attrs": {
+        "tema": "menstrual"
+      }
+    },
+    {
+      "canonical": "falta de apetite",
+      "variants": [
+        "falta de apetite",
+        "sem apetite",
+        "apetite aumentado",
+        "muita fome",
+        "compulsão por doce",
+        "compulsão alimentar"
+      ],
+      "attrs": {
+        "tema": "apetite"
+      }
+    },
+    {
+      "canonical": "dificuldade de concentração",
+      "variants": [
+        "esquecimento",
+        "falta de concentração",
+        "névoa mental",
+        "dificuldade de concentração",
+        "memória fraca"
+      ],
+      "attrs": {
+        "tema": "cognitivo"
+      }
+    },
+    {
+      "canonical": "boca seca",
+      "variants": [
+        "boca seca",
+        "sede excessiva",
+        "muita sede"
+      ],
+      "attrs": {
+        "tema": "termico"
+      }
+    },
+    {
+      "canonical": "rinite",
+      "variants": [
+        "nariz entupido",
+        "coriza",
+        "espirros",
+        "nariz escorrendo"
+      ],
+      "attrs": {
+        "tema": "respiratorio"
+      }
+    }
+  ]
+}

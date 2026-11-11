@@ -1,0 +1,16 @@
+{
+  "label": "ALERGENO",
+  "description": "Substâncias que costumam causar alergia.",
+  "entries": [
+    {"canonical": "látex", "variants": ["látex", "luvas de látex"], "attrs": {}},
+    {"canonical": "níquel", "variants": ["níquel", "metais", "bijuteria", "metal"], "attrs": {}},
+    {"canonical": "penicilina", "variants": ["penicilina", "amoxicilina", "sulfa", "antibiótico"], "attrs": {}},
+    {"canonical": "dipirona", "variants": ["alergia a dipirona", "alérgico a dipirona", "alérgica a dipirona"], "attrs": {}},
+    {"canonical": "lactose", "variants": ["lactose", "leite de vaca", "proteína do leite"], "attrs": {}},
+    {"canonical": "glúten", "variants": ["trigo", "celíaca", "celíaco"], "attrs": {}},
+    {"canonical": "poeira", "variants": ["poeira", "ácaro", "mofo", "pólen", "pelo de gato", "pelo de cachorro", "perfume"], "attrs": {}},
+    {"canonical": "frutos do mar", "variants": ["frutos do mar", "camarão", "peixe", "amendoim", "nozes", "castanhas", "ovo", "soja"], "attrs": {}},
+    {"canonical": "picada de inseto", "variants": ["picada de abelha", "picada de inseto", "picada de vespa"], "attrs": {}},
+    {"canonical": "iodo", "variants": ["iodo", "contraste", "esparadrapo", "adesivo", "micropore", "álcool 70"], "attrs": {}}
+  ]
+}

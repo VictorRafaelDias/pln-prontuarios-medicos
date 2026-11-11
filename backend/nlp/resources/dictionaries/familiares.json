@@ -1,0 +1,14 @@
+{
+  "label": "FAMILIAR",
+  "description": "Parentes (histórico familiar).",
+  "entries": [
+    {"canonical": "mãe", "variants": ["mãe", "minha mãe", "mamãe"], "attrs": {}},
+    {"canonical": "pai", "variants": ["pai", "meu pai", "papai"], "attrs": {}},
+    {"canonical": "avó", "variants": ["avó", "vovó", "avó materna", "avó paterna"], "attrs": {}},
+    {"canonical": "avô", "variants": ["avô", "vovô", "avô materno", "avô paterno"], "attrs": {}},
+    {"canonical": "irmão", "variants": ["irmão", "irmã", "irmãos"], "attrs": {}},
+    {"canonical": "tio", "variants": ["tio", "tia"], "attrs": {}},
+    {"canonical": "filho", "variants": ["filho", "filha"], "attrs": {}},
+    {"canonical": "família", "variants": ["família", "familiares", "parentes", "casos na família", "histórico familiar"], "attrs": {"generic": true}}
+  ]
+}

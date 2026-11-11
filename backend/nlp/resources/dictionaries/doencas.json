@@ -1,0 +1,309 @@
+{
+  "label": "DOENCA",
+  "description": "Doenças e diagnósticos. attrs.contra = campo de contraindicação que a doença aciona (diabetes, coagulacao, lesoes_pele...).",
+  "entries": [
+    {
+      "canonical": "hipertensão",
+      "variants": [
+        "hipertensão",
+        "pressão alta",
+        "HAS",
+        "hipertensa",
+        "hipertenso",
+        "hipertensão arterial",
+        "hipertensão arterial sistêmica"
+      ],
+      "attrs": {}
+    },
+    {
+      "canonical": "diabetes",
+      "variants": [
+        "diabetes",
+        "diabética",
+        "diabético",
+        "glicose alta",
+        "açúcar alto",
+        "DM",
+        "diabetes mellitus",
+        "diabetes tipo 2",
+        "diabetes tipo 1"
+      ],
+      "attrs": {
+        "contra": "diabetes"
+      }
+    },
+    {
+      "canonical": "hipotireoidismo",
+      "variants": [
+        "hipotireoidismo",
+        "tireoide",
+        "tireóide",
+        "hashimoto",
+        "problema de tireoide"
+      ],
+      "attrs": {}
+    },
+    {
+      "canonical": "asma",
+      "variants": [
+        "asma",
+        "bronquite"
+      ],
+      "attrs": {}
+    },
+    {
+      "canonical": "rinite alérgica",
+      "variants": [
+        "rinite",
+        "rinite alérgica",
+        "sinusite"
+      ],
+      "attrs": {}
+    },
+    {
+      "canonical": "gastrite",
+      "variants": [
+        "gastrite",
+        "úlcera",
+        "refluxo",
+        "DRGE",
+        "esofagite",
+        "refluxo gastroesofágico"
+      ],
+      "attrs": {}
+    },
+    {
+      "canonical": "colesterol alto",
+      "variants": [
+        "colesterol alto",
+        "dislipidemia",
+        "colesterol",
+        "triglicerídeos altos"
+      ],
+      "attrs": {}
+    },
+    {
+      "canonical": "fibromialgia",
+      "variants": [
+        "fibromialgia"
+      ],
+      "attrs": {}
+    },
+    {
+      "canonical": "artrose",
+      "variants": [
+        "artrose",
+        "osteoartrite",
+        "artrite",
+        "artrite reumatoide",
+        "reumatismo"
+      ],
+      "attrs": {}
+    },
+    {
+      "canonical": "hérnia de disco",
+      "variants": [
+        "hérnia de disco",
+        "hérnia",
+        "protrusão discal",
+        "protusão",
+        "abaulamento discal",
+        "discopatia"
+      ],
+      "attrs": {}
+    },
+    {
+      "canonical": "escoliose",
+      "variants": [
+        "escoliose",
+        "hiperlordose",
+        "cifose"
+      ],
+      "attrs": {}
+    },
+    {
+      "canonical": "osteoporose",
+      "variants": [
+        "osteoporose",
+        "osteopenia"
+      ],
+      "attrs": {}
+    },
+    {
+      "canonical": "depressão",
+      "variants": [
+        "depressão",
+        "transtorno depressivo",
+        "síndrome do pânico",
+        "pânico",
+        "transtorno de ansiedade",
+        "TAG"
+      ],
+      "attrs": {}
+    },
+    {
+      "canonical": "síndrome do intestino irritável",
+      "variants": [
+        "intestino irritável",
+        "síndrome do intestino irritável",
+        "SII",
+        "colite"
+      ],
+      "attrs": {}
+    },
+    {
+      "canonical": "endometriose",
+      "variants": [
+        "endometriose",
+        "SOP",
+        "ovário policístico",
+        "ovários policísticos",
+        "miomas",
+        "mioma"
+      ],
+      "attrs": {}
+    },
+    {
+      "canonical": "tendinite",
+      "variants": [
+        "tendinite",
+        "bursite",
+        "epicondilite",
+        "fasciíte plantar",
+        "fascite plantar",
+        "túnel do carpo"
+      ],
+      "attrs": {}
+    },
+    {
+      "canonical": "câncer",
+      "variants": [
+        "câncer",
+        "tumor",
+        "neoplasia",
+        "quimioterapia"
+      ],
+      "attrs": {}
+    },
+    {
+      "canonical": "AVC",
+      "variants": [
+        "AVC",
+        "derrame",
+        "acidente vascular cerebral"
+      ],
+      "attrs": {}
+    },
+    {
+      "canonical": "epilepsia",
+      "variants": [
+        "epilepsia",
+        "convulsão",
+        "convulsões"
+      ],
+      "attrs": {}
+    },
+    {
+      "canonical": "hepatite",
+      "variants": [
+        "hepatite",
+        "HIV",
+        "cirrose"
+      ],
+      "attrs": {}
+    },
+    {
+      "canonical": "doença autoimune",
+      "variants": [
+        "lúpus",
+        "psoríase",
+        "vitiligo",
+        "esclerose múltipla"
+      ],
+      "attrs": {
+        "contra_pele": true
+      }
+    },
+    {
+      "canonical": "dermatite",
+      "variants": [
+        "dermatite",
+        "eczema",
+        "herpes zoster",
+        "cobreiro",
+        "micose",
+        "herpes"
+      ],
+      "attrs": {
+        "contra": "lesoes_pele"
+      }
+    },
+    {
+      "canonical": "obesidade",
+      "variants": [
+        "obesidade",
+        "sobrepeso"
+      ],
+      "attrs": {}
+    },
+    {
+      "canonical": "anemia",
+      "variants": [
+        "anemia"
+      ],
+      "attrs": {}
+    },
+    {
+      "canonical": "trombose",
+      "variants": [
+        "trombose",
+        "TVP",
+        "embolia",
+        "varizes"
+      ],
+      "attrs": {
+        "contra": "coagulacao"
+      }
+    },
+    {
+      "canonical": "hemofilia",
+      "variants": [
+        "hemofilia",
+        "plaquetopenia",
+        "trombocitopenia",
+        "plaquetas baixas"
+      ],
+      "attrs": {
+        "contra": "coagulacao"
+      }
+    },
+    {
+      "canonical": "hipotensão",
+      "variants": [
+        "pressão baixa",
+        "hipotensão"
+      ],
+      "attrs": {}
+    },
+    {
+      "canonical": "infarto",
+      "variants": [
+        "infarto",
+        "IAM",
+        "ataque cardíaco"
+      ],
+      "attrs": {}
+    },
+    {
+      "canonical": "arritmia",
+      "variants": [
+        "arritmia",
+        "insuficiência cardíaca",
+        "problema no coração",
+        "problema de coração",
+        "doença cardíaca"
+      ],
+      "attrs": {}
+    }
+  ]
+}

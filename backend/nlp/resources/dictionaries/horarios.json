@@ -1,0 +1,12 @@
+{
+  "label": "HORARIO",
+  "description": "Períodos do dia. attrs.opcao = valor da lista 'Horário de pior intensidade'.",
+  "entries": [
+    {"canonical": "ao acordar", "variants": ["ao acordar", "ao levantar", "assim que acordo", "quando acordo", "logo ao acordar", "ao despertar", "levanto da cama"], "attrs": {"opcao": "ao acordar"}},
+    {"canonical": "manhã", "variants": ["de manhã", "pela manhã", "manhã", "no período da manhã", "logo cedo", "cedo", "manhãzinha"], "attrs": {"opcao": "manhã"}},
+    {"canonical": "tarde", "variants": ["à tarde", "de tarde", "tarde", "final da tarde", "fim da tarde", "no período da tarde", "depois do almoço"], "attrs": {"opcao": "tarde"}},
+    {"canonical": "noite", "variants": ["à noite", "de noite", "noite", "antes de dormir", "ao deitar", "quando deito", "no período da noite", "depois do trabalho", "fim do dia", "final do dia"], "attrs": {"opcao": "noite"}},
+    {"canonical": "madrugada", "variants": ["de madrugada", "na madrugada", "madrugada", "durante a madrugada"], "attrs": {"opcao": "madrugada"}},
+    {"canonical": "ao longo do dia", "variants": ["o dia todo", "o dia inteiro", "ao longo do dia", "constantemente", "o tempo todo", "dia todo"], "attrs": {"opcao": "ao longo do dia"}}
+  ]
+}

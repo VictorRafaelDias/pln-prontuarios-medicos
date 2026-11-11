@@ -1,0 +1,16 @@
+{
+  "label": "HABITO",
+  "description": "Hábitos de vida. attrs.tema = tabagismo | etilismo | bebida | agua | atividade | sono | alimentacao | intestino | urina.",
+  "entries": [
+    {"canonical": "tabagismo", "variants": ["fumo", "fumar", "fumei", "fumava", "fumando", "fuma", "fumante", "tabagista", "tabagismo", "cigarro", "maço", "charuto", "narguilé", "vape", "cigarro eletrônico", "ex-fumante", "ex fumante", "ex-tabagista", "tabaco"], "attrs": {"tema": "tabagismo"}},
+    {"canonical": "álcool", "variants": ["bebida alcoólica", "álcool", "cerveja", "vinho", "cachaça", "uísque", "whisky", "chope", "caipirinha", "vodka", "etilismo", "etilista", "drinks", "drink", "taça", "dose de bebida", "bebo socialmente", "bebe socialmente"], "attrs": {"tema": "etilismo"}},
+    {"canonical": "bebida", "variants": ["bebo", "beber", "bebia", "bebe", "bebendo", "bebi"], "attrs": {"tema": "bebida"}},
+    {"canonical": "água", "variants": ["água", "hidratação", "garrafa de água", "copos de água"], "attrs": {"tema": "agua"}},
+    {"canonical": "atividade física", "variants": ["atividade física", "exercício", "exercício físico", "academia", "musculação", "caminhada", "caminho", "corrida", "corro", "correr", "pilates", "yoga", "ioga", "natação", "bicicleta", "pedalo", "futebol", "dança", "treino", "crossfit", "treino de força", "hidroginástica", "tai chi", "qigong", "lian gong"], "attrs": {"tema": "atividade"}},
+    {"canonical": "sedentarismo", "variants": ["sedentário", "sedentária", "sedentarismo", "não faço exercício", "não pratico exercício"], "attrs": {"tema": "atividade", "sedentario": true}},
+    {"canonical": "sono", "variants": ["sono", "durmo", "dormir", "dormindo", "dormi", "horas de sono", "durmo bem", "sono tranquilo", "sono bom", "sono regular"], "attrs": {"tema": "sono"}},
+    {"canonical": "alimentação", "variants": ["alimentação", "dieta", "refeição", "fast food", "fritura", "doce", "açúcar", "café", "refrigerante", "verdura", "fruta", "legume", "carne vermelha", "carboidrato", "leite", "laticínio", "glúten", "comida pronta", "industrializado", "café da manhã", "almoço", "jantar", "vegetariano", "vegetariana", "vegano", "vegana", "jejum", "lanche", "salada", "frango", "peixe", "arroz e feijão", "pizza", "chocolate", "comida"], "attrs": {"tema": "alimentacao"}},
+    {"canonical": "intestino", "variants": ["intestino", "evacuar", "evacuo", "fezes", "cocô", "banheiro", "vou ao banheiro"], "attrs": {"tema": "intestino"}},
+    {"canonical": "urina", "variants": ["urina", "urinar", "xixi", "urino"], "attrs": {"tema": "urina"}}
+  ]
+}

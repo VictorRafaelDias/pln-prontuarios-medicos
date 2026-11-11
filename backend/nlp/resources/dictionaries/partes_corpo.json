@@ -1,0 +1,24 @@
+{
+  "label": "PARTE_CORPO",
+  "description": "Partes do corpo. attrs.regiao = id da região no mapa corporal; attrs.lateral = true quando existe _d/_e (direita/esquerda).",
+  "entries": [
+    {"canonical": "cabeça", "variants": ["cabeça", "crânio", "têmpora", "testa", "fronte", "occipital", "couro cabeludo", "rosto", "face", "mandíbula", "maxilar", "ATM", "olho", "ouvido"], "attrs": {"regiao": ["cabeca"]}},
+    {"canonical": "pescoço", "variants": ["pescoço", "cervical", "nuca", "região cervical", "trapézio"], "attrs": {"regiao": ["cervical"]}},
+    {"canonical": "garganta", "variants": ["garganta"], "attrs": {"regiao": ["pescoco"]}},
+    {"canonical": "ombro", "variants": ["ombro"], "attrs": {"regiao": ["ombro"], "lateral": true}},
+    {"canonical": "braço", "variants": ["braço", "bíceps"], "attrs": {"regiao": ["braco"], "lateral": true}},
+    {"canonical": "cotovelo", "variants": ["cotovelo"], "attrs": {"regiao": ["cotovelo"], "lateral": true}},
+    {"canonical": "antebraço", "variants": ["antebraço"], "attrs": {"regiao": ["antebraco"], "lateral": true}},
+    {"canonical": "mão", "variants": ["mão", "punho", "dedo", "polegar", "palma da mão"], "attrs": {"regiao": ["mao"], "lateral": true}},
+    {"canonical": "tórax", "variants": ["peito", "tórax", "costela", "esterno"], "attrs": {"regiao": ["torax"]}},
+    {"canonical": "costas", "variants": ["costas", "coluna", "coluna dorsal", "região dorsal", "dorsal", "escápula", "omoplata"], "attrs": {"regiao": ["dorsal"], "generic": true}},
+    {"canonical": "lombar", "variants": ["lombar", "região lombar", "parte baixa das costas", "baixa das costas", "cintura", "sacro", "cóccix"], "attrs": {"regiao": ["lombar"]}},
+    {"canonical": "abdômen", "variants": ["barriga", "abdômen", "abdome", "estômago", "epigástrio", "pança"], "attrs": {"regiao": ["abdomen"]}},
+    {"canonical": "quadril", "variants": ["quadril", "bacia", "virilha"], "attrs": {"regiao": ["quadril"], "lateral": true}},
+    {"canonical": "glúteo", "variants": ["glúteo", "bumbum"], "attrs": {"regiao": ["gluteo"], "lateral": true}},
+    {"canonical": "coxa", "variants": ["coxa"], "attrs": {"regiao": ["coxa"], "lateral": true}},
+    {"canonical": "joelho", "variants": ["joelho"], "attrs": {"regiao": ["joelho"], "lateral": true}},
+    {"canonical": "perna", "variants": ["perna", "panturrilha", "canela"], "attrs": {"regiao": ["perna"], "lateral": true}},
+    {"canonical": "pé", "variants": ["pé", "calcanhar", "planta do pé", "tornozelo"], "attrs": {"regiao": ["pe"], "lateral": true}}
+  ]
+}

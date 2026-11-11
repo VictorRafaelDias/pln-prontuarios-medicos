@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 44 47% 95%;        /* creme */
+    --foreground: 150 6% 19%;        /* grafite */
+    --card: 44 55% 98%;
+    --card-foreground: 150 6% 19%;
+    --primary: 141 17% 43%;          /* verde-sálvia */
+    --primary-foreground: 44 55% 97%;
+    --secondary: 44 30% 89%;
+    --secondary-foreground: 150 8% 22%;
+    --muted: 44 28% 91%;
+    --muted-foreground: 150 6% 40%;
+    --accent: 14 49% 49%;            /* terracota */
+    --accent-foreground: 44 55% 97%;
+    --destructive: 6 62% 46%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 44 20% 83%;
+    --input: 44 20% 80%;
+    --ring: 141 17% 43%;
+    --radius: 0.9rem;
+    --shadow: 150 20% 20%;
+    --lab-bg: 150 10% 96%;
+    /* categorias de entidade (Laboratório) */
+    --e-PARTE_CORPO: 38 55% 78%; --e-SINTOMA: 14 75% 82%; --e-TIPO_DOR: 0 70% 85%; --e-DOENCA: 280 40% 84%;
+    --e-MEDICAMENTO: 160 38% 76%; --e-HABITO: 48 85% 78%; --e-MTC: 210 55% 82%; --e-PONTO: 185 50% 74%;
+    --e-TECNICA: 90 40% 76%; --e-HORARIO: 265 50% 88%; --e-CONDICAO: 340 70% 84%; --e-INTENSIDADE: 28 95% 78%;
+    --e-FREQUENCIA: 52 90% 80%; --e-TEMPO: 100 45% 78%; --e-CIRURGIA: 25 35% 76%; --e-FAMILIAR: 320 50% 86%;
+    --e-ALERGENO: 0 55% 80%; --e-DOSE: 0 0% 82%; --e-PER: 220 15% 85%; --e-LOC: 220 15% 85%; --e-ORG: 220 15% 85%; --e-MISC: 220 15% 85%;
+  }
+  .dark {
+    --background: 150 10% 10%;
+    --foreground: 44 25% 90%;
+    --card: 150 9% 13%;
+    --card-foreground: 44 25% 90%;
+    --primary: 141 22% 56%;
+    --primary-foreground: 150 12% 8%;
+    --secondary: 150 8% 19%;
+    --secondary-foreground: 44 25% 88%;
+    --muted: 150 8% 17%;
+    --muted-foreground: 44 10% 65%;
+    --accent: 14 55% 58%;
+    --accent-foreground: 150 12% 8%;
+    --destructive: 6 65% 56%;
+    --border: 150 8% 24%;
+    --input: 150 8% 26%;
+    --ring: 141 22% 56%;
+    --shadow: 0 0% 0%;
+    --lab-bg: 150 12% 8%;
+    --e-PARTE_CORPO: 38 35% 32%; --e-SINTOMA: 14 40% 33%; --e-TIPO_DOR: 0 35% 33%; --e-DOENCA: 280 25% 32%;
+    --e-MEDICAMENTO: 160 28% 28%; --e-HABITO: 48 45% 30%; --e-MTC: 210 35% 32%; --e-PONTO: 185 35% 28%;
+    --e-TECNICA: 90 25% 28%; --e-HORARIO: 265 25% 33%; --e-CONDICAO: 340 35% 34%; --e-INTENSIDADE: 28 50% 32%;
+    --e-FREQUENCIA: 52 45% 30%; --e-TEMPO: 100 28% 28%; --e-CIRURGIA: 25 25% 30%; --e-FAMILIAR: 320 28% 34%;
+    --e-ALERGENO: 0 32% 32%; --e-DOSE: 0 0% 30%; --e-PER: 220 10% 30%; --e-LOC: 220 10% 30%; --e-ORG: 220 10% 30%; --e-MISC: 220 10% 30%;
+  }
+  * { @apply border-border; }
+  html { font-feature-settings: "cv02", "cv03", "cv04", "cv11"; }
+  body { @apply bg-background text-foreground font-sans antialiased; }
+  h1, h2, h3, .font-display { @apply font-serif tracking-tight; }
+  code, pre, .mono { @apply font-mono; }
+}
+
+@layer components {
+  .field-flash { animation: flash 1.6s ease-out; }
+  .field-auto { box-shadow: inset 3px 0 0 hsl(var(--primary)); background: hsl(var(--primary) / .07); }
+  .field-conflict { box-shadow: inset 3px 0 0 hsl(var(--accent)); background: hsl(var(--accent) / .08); }
+  .rec-dot { animation: pulse-ring 1.4s infinite; }
+  .step-in { animation: step-in .5s ease-out both; }
+  .ent { @apply rounded px-0.5 py-[1px] cursor-help transition-all; }
+  .ent-neg { text-decoration: line-through; text-decoration-color: hsl(var(--destructive)); text-decoration-thickness: 2px; }
+  .ent-unc { text-decoration: underline wavy hsl(var(--accent)); text-underline-offset: 3px; }
+  .ent-fmr { font-style: italic; border-bottom: 2px dotted hsl(var(--muted-foreground)); }
+  .slider-eva { background: linear-gradient(90deg, #7fae8b 0%, #c8c76a 40%, #e0a458 70%, #c4553b 100%); }
+  .svg-dep svg { max-width: none; color: hsl(var(--foreground)); }
+}
+
+@keyframes flash { 0% { background: hsl(var(--primary) / .45); transform: scale(1.005); } 100% { background: hsl(var(--primary) / .07); transform: none; } }
+@keyframes pulse-ring { 0% { box-shadow: 0 0 0 0 hsl(var(--destructive) / .6); } 70% { box-shadow: 0 0 0 10px hsl(var(--destructive) / 0); } 100% { box-shadow: 0 0 0 0 hsl(var(--destructive) / 0); } }
+@keyframes step-in { from { opacity: 0; transform: translateY(8px) scale(.96); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { * { animation-duration: .01ms !important; transition-duration: .01ms !important; } }

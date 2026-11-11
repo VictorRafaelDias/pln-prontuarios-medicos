@@ -1,0 +1,11 @@
+{
+  "_doc": "Lista de stopwords = NLTK (português) + 'extra' − 'preserve'. As palavras em 'preserve' carregam NEGAÇÃO, INTENSIDADE, TEMPO ou INCERTEZA e mudam o significado clínico da frase; removê-las transformaria 'não fumo' em 'fumo'.",
+  "preserve": {
+    "negacao": ["não", "nunca", "nem", "jamais", "sem", "nenhum", "nenhuma", "ninguém", "nada", "nega", "negou"],
+    "intensidade": ["muito", "muita", "muitos", "muitas", "pouco", "pouca", "poucos", "poucas", "mais", "menos", "bastante", "demais", "tão", "quase", "só", "apenas", "tanto", "tanta", "todo", "toda", "todos", "todas"],
+    "tempo": ["já", "ainda", "antes", "depois", "desde", "há", "sempre", "agora", "hoje", "ontem", "durante", "até", "após"],
+    "incerteza": ["talvez", "acho", "pode", "parece", "às", "vezes"],
+    "contraste": ["mas", "porém", "contudo", "se"]
+  },
+  "extra": ["né", "tipo", "assim", "aí", "então", "bom", "olha", "tá", "ok", "pois", "daí", "vamos", "vou", "vai", "pra", "pro", "ah", "uh", "hum", "ahn", "aham", "uhum", "certo", "claro"]
+}

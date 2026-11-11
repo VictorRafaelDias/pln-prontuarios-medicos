@@ -1,0 +1,20 @@
+{
+  "label": "CIRURGIA",
+  "description": "Cirurgias e procedimentos.",
+  "entries": [
+    {"canonical": "cesárea", "variants": ["cesárea", "cesariana"], "attrs": {}},
+    {"canonical": "apendicectomia", "variants": ["apendicectomia", "cirurgia de apendicite", "retirada do apêndice", "tirei o apêndice"], "attrs": {}},
+    {"canonical": "colecistectomia", "variants": ["colecistectomia", "retirada da vesícula", "tirei a vesícula", "cirurgia da vesícula"], "attrs": {}},
+    {"canonical": "histerectomia", "variants": ["histerectomia", "retirada do útero", "tirei o útero"], "attrs": {}},
+    {"canonical": "cirurgia de hérnia", "variants": ["cirurgia de hérnia", "operação de hérnia", "herniorrafia"], "attrs": {}},
+    {"canonical": "artroscopia", "variants": ["artroscopia", "cirurgia no joelho", "cirurgia do joelho", "cirurgia de menisco", "ligamento cruzado"], "attrs": {}},
+    {"canonical": "cirurgia de coluna", "variants": ["cirurgia de coluna", "cirurgia na coluna", "artrodese", "discectomia"], "attrs": {}},
+    {"canonical": "cirurgia de ombro", "variants": ["cirurgia no ombro", "cirurgia de ombro", "manguito rotador operado"], "attrs": {}},
+    {"canonical": "amigdalectomia", "variants": ["amigdalectomia", "tirei as amígdalas", "cirurgia das amígdalas", "retirada das amígdalas"], "attrs": {}},
+    {"canonical": "cirurgia cardíaca", "variants": ["ponte de safena", "cirurgia cardíaca", "stent", "angioplastia"], "attrs": {}},
+    {"canonical": "laqueadura", "variants": ["laqueadura", "vasectomia"], "attrs": {}},
+    {"canonical": "cirurgia bariátrica", "variants": ["cirurgia bariátrica", "bariátrica", "redução de estômago"], "attrs": {}},
+    {"canonical": "cirurgia plástica", "variants": ["mastectomia", "lipoaspiração", "prótese de silicone", "plástica", "septoplastia", "rinoplastia"], "attrs": {}},
+    {"canonical": "cirurgia", "variants": ["cirurgia", "operação", "operei", "operada", "operado", "fui operada", "fui operado", "procedimento cirúrgico"], "attrs": {"generic": true}}
+  ]
+}
