@@ -17,7 +17,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from nlp import llm as llm_mod  # noqa: E402
 from nlp import spacy_loader  # noqa: E402
-from nlp.form_schema import FIELD_BY_ID, schema_payload  # noqa: E402
+from nlp.form_schema import FIELD_BY_ID, normalize_value, sanitize_form, schema_payload  # noqa: E402
 from nlp.pipeline import run_pipeline  # noqa: E402
 from nlp.resources import get_resources  # noqa: E402
 
@@ -39,6 +39,7 @@ async def lifespan(app: FastAPI):
     yield
 
 
+KINDS = ("anamnese", "soap")
 app = FastAPI(title="Prontuário Qi", version="1.0.0", lifespan=lifespan)
 app.add_middleware(CORSMiddleware, allow_origins=[], allow_origin_regex=r"^https?://(localhost|127\.0\.0\.1)(:\d+)?$", allow_methods=["*"], allow_headers=["*"])
 app.include_router(lab_router, prefix="/api/lab")
@@ -73,6 +74,8 @@ def points():
 # --------------------------------------------------------------------------- PLN
 @app.post("/api/nlp/process")
 def nlp_process(body: dict = Body(...)):
+    if body.get("mode", "anamnese") not in KINDS:
+        raise HTTPException(422, "mode deve ser 'anamnese' ou 'soap'.")
     utts = body.get("utterances") or []
     res = run_pipeline(utts, mode=body.get("mode", "anamnese"), use_llm=bool(body.get("use_llm")), llm_fields=body.get("llm_fields"),
                        confirmed=body.get("confirmed") or {}, previous_session=body.get("previous_session"), include_stages=False)
@@ -127,14 +130,17 @@ def update_patient(pid: int, body: dict = Body(...), s: Session = Depends(get_se
     p = s.get(Patient, pid)
     if not p:
         raise HTTPException(404)
+    if "name" in body and not str(body["name"] or "").strip():
+        raise HTTPException(422, "O nome do paciente não pode ficar vazio.")
     for k in ("name", "birth_date", "phone", "email", "profession"):
         if k in body and body[k] != getattr(p, k):
             audit(s, "editar_dados", pid, field=k, old=getattr(p, k), new=body[k])
             setattr(p, k, body[k])
     if "anamnese" in body:
         form = dict(p.anamnese or {})
-        for fid, val in body["anamnese"].items():
-            if fid in FIELD_BY_ID and (form.get(fid) or {}).get("value") != val:
+        for fid, raw in body["anamnese"].items():
+            val = normalize_value(fid, raw) if fid in FIELD_BY_ID else None
+            if val is not None and (form.get(fid) or {}).get("value") != val:
                 audit(s, "editar_anamnese", pid, field=fid, old=(form.get(fid) or {}).get("value"), new=val)
                 form[fid] = {"value": val, "source": "manual", "confidence": 1.0, "evidence": "", "confirmed": True}
         p.anamnese = form
@@ -158,6 +164,8 @@ def patient_audit(pid: int, s: Session = Depends(get_session)):
 @app.post("/api/sessions")
 def create_session(body: dict = Body(...), s: Session = Depends(get_session)):
     kind = body.get("kind", "anamnese")
+    if kind not in KINDS:
+        raise HTTPException(422, "kind deve ser 'anamnese' ou 'soap'.")
     pid = body.get("patient_id")
     pdata = body.get("patient_data") or {}
     if pid:
@@ -201,9 +209,11 @@ def save_draft(sid: int, body: dict = Body(...), s: Session = Depends(get_sessio
     x = s.get(ConsultaSession, sid)
     if not x or x.status != "draft":
         raise HTTPException(404, "Rascunho não encontrado")
-    for k in ("form", "transcript", "patient_data", "duration_s"):
+    for k in ("transcript", "patient_data", "duration_s"):
         if k in body:
             setattr(x, k, body[k])
+    if "form" in body:
+        x.form = sanitize_form(body["form"], x.kind)
     x.updated_at = now()
     s.add(x)
     s.commit()
@@ -230,10 +240,7 @@ def save_session(sid: int, body: dict = Body(...), s: Session = Depends(get_sess
         audit(s, "criar_paciente", p.id, x.id)
     elif not p.consent_lgpd:
         p.consent_lgpd, p.consent_at = True, now()
-    form = body.get("form", x.form) or {}
-    for fid, f in form.items():
-        if isinstance(f, dict) and f.get("value") is not None and "confirmed" not in f:
-            f["confirmed"] = f.get("source") == "manual"
+    form = sanitize_form(body.get("form", x.form) or {}, x.kind)
     transcript = body.get("transcript", x.transcript) or []
     x.patient_id, x.form, x.transcript, x.patient_data = p.id, form, transcript, pdata
     x.duration_s = body.get("duration_s", x.duration_s)
@@ -362,16 +369,22 @@ def backup(s: Session = Depends(get_session)):
 
 @app.post("/api/restore")
 def restore(body: dict = Body(...), s: Session = Depends(get_session)):
-    if body.get("app") != "prontuario-qi":
+    """Restaura um backup de forma ATÔMICA: se qualquer linha for inválida, nada é apagado."""
+    tables = body.get("tables")
+    if body.get("app") != "prontuario-qi" or not isinstance(tables, dict):
         raise HTTPException(422, "Arquivo de backup inválido.")
-    for t in TABLES.values():
-        s.exec(delete(t))
-    s.commit()
-    for n, t in TABLES.items():
-        for row in body["tables"].get(n, []):
-            s.add(t(**row))
-    s.commit()
-    return {"ok": True, "patients": len(body["tables"].get("patient", []))}
+    if not all(isinstance(tables.get(n, []), list) and all(isinstance(r, dict) for r in tables.get(n, [])) for n in TABLES):
+        raise HTTPException(422, "Arquivo de backup inválido: cada tabela deve ser uma lista de objetos.")
+    try:
+        novos = [t(**row) for n, t in TABLES.items() for row in tables.get(n, [])]  # valida as linhas ANTES de apagar
+        for t in TABLES.values():
+            s.exec(delete(t))
+        s.add_all(novos)
+        s.commit()
+    except Exception as e:  # noqa: BLE001
+        s.rollback()
+        raise HTTPException(422, f"Backup recusado; nada foi alterado ({type(e).__name__}).") from e
+    return {"ok": True, "patients": len(tables.get("patient", []))}
 
 
 # --------------------------------------------------------------------------- Frontend estático (build de produção)
@@ -381,5 +394,8 @@ if DIST.exists():
 
     @app.get("/{path:path}")
     def spa(path: str):
-        f = DIST / path
-        return FileResponse(f if f.is_file() else DIST / "index.html")
+        if path == "api" or path.startswith("api/"):
+            raise HTTPException(404, "Rota da API não encontrada")
+        f = (DIST / path).resolve()
+        inside = f == DIST.resolve() or DIST.resolve() in f.parents  # impede path traversal para fora de dist/
+        return FileResponse(f if inside and f.is_file() else DIST / "index.html")

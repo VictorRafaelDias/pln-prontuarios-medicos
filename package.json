@@ -10,7 +10,9 @@
     "dev:web": "npm --prefix frontend run dev",
     "build": "npm --prefix frontend run build",
     "test": "node scripts/run-tests.mjs",
-    "eval": "node scripts/run-eval.mjs"
+    "eval": "node scripts/run-eval.mjs",
+    "check:db": "node scripts/run-py.mjs scripts/check_db.py",
+    "smoke": "node scripts/run-py.mjs scripts/smoke.py"
   },
   "devDependencies": {
     "concurrently": "^9.1.0"

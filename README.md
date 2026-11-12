@@ -24,7 +24,9 @@ npm run dev         # API (porta 8010) + frontend (http://localhost:5173) juntos
 ```
 
 Atalhos: `iniciar.bat` (Windows) ou `./iniciar.sh` (Linux/macOS) fazem tudo e abrem o navegador.
-Outros comandos: `npm test` (pytest: 56 testes — unidade por etapa, integração da API, backup/restauração, CORS, falha do LLM) · `npm run eval` (avaliação).
+Outros comandos: `npm test` (pytest: ~194 testes — unidade por etapa, invariantes do pipeline em todos os transcritos, fuzz, casos de borda da API, backup/restauração atômica, CORS, falha do LLM) · `npm run eval` (avaliação).
+
+Validação com o sistema rodando: `npm run smoke` (todas as rotas, 404/405, path traversal) e `npm run check:db` (integridade e consistência do SQLite, somente leitura).
 
 Para subir sem abrir o navegador: `NO_BROWSER=1` antes do script. Se a porta 8000 do seu computador estiver ocupada, nada muda: a API usa a **8010** (`API_PORT` no `.env`).
 

@@ -104,8 +104,15 @@ def normalize_text(raw: str, speaker: str, cfg: dict, counts: Counter) -> str:
     return t
 
 
+MAX_DIFF_TOKENS = 500  # acima disso o difflib (quadrático) travaria o servidor: usa-se um diff grosseiro
+
+
 def make_diff(a: str, b: str) -> list[dict]:
     ta, tb = re.findall(r"\S+", a), re.findall(r"\S+", b)
+    if len(ta) + len(tb) > MAX_DIFF_TOKENS:
+        if a.strip() == b.strip():
+            return [{"op": "equal", "a": a.strip(), "b": b.strip()}]
+        return [{"op": "replace", "a": a.strip(), "b": b.strip(), "coarse": True}]
     sm = difflib.SequenceMatcher(None, ta, tb, autojunk=False)
     ops: list[dict] = []
     for tag, i1, i2, j1, j2 in sm.get_opcodes():

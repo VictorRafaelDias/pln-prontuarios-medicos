@@ -175,7 +175,20 @@ def is_empty(value: Any) -> bool:
     return False
 
 
-_POINT_RE = re.compile(r"^(EX-HN\d+|AURIC-[A-Z]+|[A-Z]{1,2})(\d{1,2})?$")
+_POINT_RE = re.compile(r"^(EX-HN\d{1,2}|AURIC-[A-Z]+|[A-Z]{1,2}\d{1,2})$")
+_SOURCES = {"rules", "llm", "both", "manual", "calc"}
+
+
+def is_valid_point(code: str) -> bool:
+    """Código de ponto existente: prefixo de meridiano conhecido e número dentro do total do canal (VB1–44, E1–45...)."""
+    if not _POINT_RE.match(code):
+        return False
+    if code.startswith(("EX-HN", "AURIC-")):
+        return True
+    m = re.match(r"^([A-Z]{1,2})(\d{1,2})$", code)
+    from .resources import get_resources  # import tardio: resources depende deste módulo
+    mer = get_resources()["points"]["meridianos"].get(m.group(1))
+    return bool(mer and 1 <= int(m.group(2)) <= mer["n"])
 
 
 def normalize_point(code: str) -> str:
@@ -260,7 +273,7 @@ def normalize_value(field_id: str, raw: Any) -> Any:
             out = []
             for it in items:
                 c = normalize_point(it)
-                if c and _POINT_RE.match(c) and c not in out:
+                if c and is_valid_point(c) and c not in out:
                     out.append(c)
             return out or None
     except (ValueError, TypeError):
@@ -275,3 +288,36 @@ def compute_maco_ano(values: dict[str, Any]) -> float | None:
     if isinstance(cig, (int, float)) and isinstance(anos, (int, float)) and cig > 0 and anos > 0:
         return round((cig / 20.0) * anos, 1)
     return None
+
+
+def sanitize_form(form, kind: str) -> dict:
+    """Saneia o preenchimento recebido do cliente: descarta campos desconhecidos/fora do modo, normaliza valores pelo tipo do campo
+    (EVA > 10 vira 10, pontos inexistentes caem) e força origem, confiança e estrutura válidas."""
+    allowed = set(field_ids_for_mode(kind)) | {"habitos.maco_ano"}
+    out: dict = {}
+    if not isinstance(form, dict):
+        return out
+    for fid, f in form.items():
+        if fid not in allowed or not isinstance(f, dict) or "value" not in f:
+            continue
+        v = normalize_value(fid, f["value"])
+        if v is None:
+            continue
+        src = f.get("source") if f.get("source") in _SOURCES else "manual"
+        try:
+            conf = max(0.0, min(1.0, float(f.get("confidence", 1.0 if src == "manual" else 0.5))))
+        except (TypeError, ValueError):
+            conf = 1.0 if src == "manual" else 0.5
+        rec = {"value": v, "source": src, "confidence": round(conf, 3), "evidence": str(f.get("evidence") or "")[:500],
+               "confirmed": bool(f.get("confirmed", src == "manual"))}
+        for k in ("conflict", "uncertain"):
+            if k in f:
+                rec[k] = bool(f[k])
+        for k in ("rule", "note", "status"):
+            if isinstance(f.get(k), str):
+                rec[k] = f[k][:300]
+        if isinstance(f.get("alternatives"), list):
+            rec["alternatives"] = [{k: a.get(k) for k in ("value", "confidence", "evidence", "source") if k in a}
+                                   for a in f["alternatives"][:3] if isinstance(a, dict)]
+        out[fid] = rec
+    return out

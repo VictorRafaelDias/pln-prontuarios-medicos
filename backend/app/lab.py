@@ -49,6 +49,10 @@ def analyze(body: dict = Body(...), s: Session = Depends(get_session)):
         utts = parse_free_text(body["text"])
     if not utts:
         raise HTTPException(422, "Forneça utterances, session_id ou text.")
+    if body.get("mode", "anamnese") not in ("anamnese", "soap"):
+        raise HTTPException(422, "mode deve ser 'anamnese' ou 'soap'.")
+    if not any(str(u.get("text") or "").strip() for u in utts):
+        raise HTTPException(422, "O texto está vazio.")
     res = run_pipeline(utts, mode=body.get("mode", "anamnese"), use_llm=bool(body.get("use_llm")), force_llm=bool(body.get("use_llm")),
                        confirmed={}, previous_session=body.get("previous_session"), include_stages=True,
                        count_llm_tokens=bool(body.get("count_llm_tokens", True)))
