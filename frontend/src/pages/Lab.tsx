@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight, Download, FlaskConical, Play, Sparkles } fro
 import { api, sourceLabel } from "@/lib/api";
 import { cn, download } from "@/lib/utils";
 import { useApp } from "@/App";
+import Dictionaries from "@/lab/Dictionaries";
 import { Badge, Button, Card, CardContent, CardHeader, CardTitle, Empty, Select, Skeleton, Tabs, TabsContent, TabsList, TabsTrigger, Textarea, Tip } from "@/components/ui";
 
 const SAMPLE = "Profissional: Qual é a sua queixa principal?\nPaciente: É... tipo, uma dor no joelho direito, né, há uns três meses. Dor nota oito, piora de manhã.\nProfissional: Você fuma?\nPaciente: Não fumo mais, parei de fumar há dois anos. Fumava dez cigarros por dia.\nProfissional: Língua pálida, pulso fino. Vou usar E36, BP6 e VB34.";
@@ -64,7 +65,7 @@ export default function Lab() {
       {!a ? (busy ? <Skeleton className="h-96" /> : <Empty title="Escolha uma fonte de texto e clique em Analisar" icon={<FlaskConical className="size-8" />} />) : (
         <Tabs defaultValue="pipeline">
           <TabsList className="h-auto flex-wrap">
-            {[["pipeline", "Pipeline"], ["anotado", "Texto anotado"], ["tabelas", "Tabelas"], ["stats", "Estatísticas"], ["compara", "Regras × LLM"], ["avalia", "Avaliação"], ["llm", "Inspeção do LLM"], ["export", "Exportar"]].map(([v, l]) => <TabsTrigger key={v} value={v}>{l}</TabsTrigger>)}
+            {[["pipeline", "Pipeline"], ["anotado", "Texto anotado"], ["tabelas", "Tabelas"], ["stats", "Estatísticas"], ["compara", "Regras × LLM"], ["avalia", "Avaliação"], ["llm", "Inspeção do LLM"], ["dic", "Dicionários"], ["export", "Exportar"]].map(([v, l]) => <TabsTrigger key={v} value={v}>{l}</TabsTrigger>)}
           </TabsList>
           <TabsContent value="pipeline"><Pipeline a={a} step={step} setStep={setStep} stepMode={stepMode} setStepMode={setStepMode} /></TabsContent>
           <TabsContent value="anotado"><Annotated a={a} /></TabsContent>
@@ -73,6 +74,7 @@ export default function Lab() {
           <TabsContent value="compara"><Compare a={a} /></TabsContent>
           <TabsContent value="avalia"><Evaluation /></TabsContent>
           <TabsContent value="llm"><LlmInspect a={a} /></TabsContent>
+          <TabsContent value="dic"><Dictionaries onSaved={() => analyze(false)} /></TabsContent>
           <TabsContent value="export"><Export a={a} /></TabsContent>
         </Tabs>
       )}

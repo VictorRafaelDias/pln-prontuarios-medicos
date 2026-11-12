@@ -3,6 +3,7 @@ import { AlertTriangle, Check, CircleHelp, X } from "lucide-react";
 import { FieldDef, FieldState, Form, Schema, sourceLabel } from "@/lib/api";
 import { cn, fold, isEmpty } from "@/lib/utils";
 import { Badge, Button, EvaSlider, Input, Section, Textarea, Tip } from "@/components/ui";
+import { BodyMap } from "@/components/BodyMap";
 
 const SRC_VARIANT: Record<string, any> = { rules: "default", llm: "accent", both: "solid", manual: "outline", calc: "muted" };
 
@@ -81,10 +82,7 @@ function Control({ f, v, set, schema, catalog }: { f: FieldDef; v: any; set: (v:
       </div>);
     case "list": return <ListInput value={v ?? []} onChange={set} />;
     case "points": return <PointsInput value={v ?? []} onChange={set} catalog={catalog} />;
-    case "bodymap": return (
-      <div className="space-y-2">
-        <Chips options={Object.keys(schema.regions)} labels={schema.regions} value={v ?? []} onToggle={(o) => { const a: string[] = v ?? []; set(a.includes(o) ? a.filter((x) => x !== o) : [...a, o]); }} />
-      </div>);
+    case "bodymap": return <BodyMap value={v ?? []} onChange={set} regions={schema.regions} />;
   }
   return null;
 }

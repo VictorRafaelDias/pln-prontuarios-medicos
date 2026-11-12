@@ -43,7 +43,9 @@ Sem chave, o sistema funciona 100% com o PLN clássico e mostra o selo **“Some
 
 A Web Speech API do Chrome **envia o áudio para servidores do Google** para transcrever. Os demais dados ficam na sua máquina (SQLite local). Em navegadores sem suporte há um aviso e a opção de **digitar/colar** a transcrição. Há também o botão **Simular consulta**, que “fala” uma transcrição fictícia (com negações, ex-hábitos, números por extenso, incerteza e oralidade) para testar sem microfone. O consentimento LGPD é obrigatório para salvar.
 
-Atalhos: **Espaço** grava/pausa (fora de campos) · **Ctrl+S** vai à revisão · **Ctrl+K** abre a busca de pacientes.
+O formulário de localização usa um **mapa corporal SVG clicável** (frente/costas).
+
+Atalhos: **Espaço** grava/pausa (fora de campos) · **Ctrl+S** vai à revisão · **Ctrl+K** abre a busca global (pacientes, queixas, padrões de MTC, pontos).
 
 ## Telas
 
@@ -53,7 +55,7 @@ Início · Nova consulta (dados + LGPD → transcrição ao vivo × formulário 
 
 ## Arquitetura do PLN
 
-O pipeline vive em `backend/nlp/`. Cada etapa é uma classe (`nlp/stages/sNN_*.py`) que recebe o estado da anterior e registra **entrada, saída e tempo (ms)**; o orquestrador é `nlp/pipeline.py`. Tudo pode ser inspecionado no **Laboratório PLN** (modo passo a passo, texto anotado, tabelas, estatísticas, comparativo Regras × LLM, avaliação, inspeção do LLM e exportação em JSON/HTML/PDF).
+O pipeline vive em `backend/nlp/`. Cada etapa é uma classe (`nlp/stages/sNN_*.py`) que recebe o estado da anterior e registra **entrada, saída e tempo (ms)**; o orquestrador é `nlp/pipeline.py`. Tudo pode ser inspecionado no **Laboratório PLN** (modo passo a passo, texto anotado, tabelas, estatísticas, comparativo Regras × LLM, avaliação, inspeção do LLM, **editor de dicionários com reprocessamento imediato** e exportação em JSON/HTML/PDF).
 
 | # | Etapa | O que faz | Por que |
 |---|---|---|---|
@@ -93,7 +95,7 @@ Os dicionários (`nlp/resources/dictionaries/*.json`), os gatilhos de negação,
 - Lateralidade e pares pergunta→resposta usam heurísticas simples (resposta imediata à pergunta anterior).
 - Web Speech API erra nomes de medicamentos e pontos falados; o profissional pode editar a transcrição.
 - O caminho do LLM foi testado com **cliente simulado** (sem chave no desenvolvimento); a chamada real depende de configuração do usuário.
-- Fora do escopo desta versão: editor de dicionários na interface (os JSON são editáveis em disco e há endpoints na API), mapa corporal em SVG (a localização usa seleção de regiões), exportação PDF de “documentos” do Laboratório além do relatório da análise.
+- O mapa corporal é um desenho esquemático (regiões geométricas), suficiente para marcar a localização, mas não anatômico.
 
 ## Estrutura
 
