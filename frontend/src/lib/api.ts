@@ -17,7 +17,7 @@ export interface Schema {
 export interface Status {
   llm_enabled: boolean; model: string | null; effort: string; badge: string; prices?: { in: number; out: number };
   spacy: { model: string; version: string; pipeline: string[]; ruler_patterns: number };
-  settings: { clinic_name: string; professional_name: string; speech_lang: string; clinic_address: string; clinic_phone: string };
+  settings: { clinic_name: string; professional_name: string; speech_lang: string; clinic_address: string; clinic_phone: string; professional_voice: "auto" | "masculina" | "feminina" };
 }
 
 async function req<T>(method: string, url: string, body?: unknown): Promise<T> {

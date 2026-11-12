@@ -29,6 +29,7 @@ export default function Config() {
         <div className="space-y-1.5"><Label>Endereço</Label><Input value={s.clinic_address ?? ""} onChange={(e) => setS({ ...s, clinic_address: e.target.value })} /></div>
         <div className="space-y-1.5"><Label>Telefone da clínica</Label><Input value={s.clinic_phone ?? ""} onChange={(e) => setS({ ...s, clinic_phone: e.target.value })} /></div>
         <div className="space-y-1.5"><Label>Idioma do reconhecimento</Label><Select className="w-full" value={s.speech_lang ?? "pt-BR"} onChange={(e) => setS({ ...s, speech_lang: e.target.value })}><option value="pt-BR">Português (Brasil)</option><option value="pt-PT">Português (Portugal)</option><option value="en-US">English (US)</option><option value="es-ES">Español</option></Select></div>
+        <div className="space-y-1.5"><Label>Voz do profissional na simulação</Label><Select className="w-full" value={s.professional_voice ?? "auto"} onChange={(e) => setS({ ...s, professional_voice: e.target.value })}><option value="auto">Automática (oposta à do paciente)</option><option value="masculina">Masculina</option><option value="feminina">Feminina</option></Select></div>
         <div className="flex items-end"><Button onClick={save}>Salvar</Button></div>
       </CardContent></Card>
       <Card><CardHeader><CardTitle>Backup e restauração</CardTitle></CardHeader><CardContent className="flex flex-wrap gap-3">

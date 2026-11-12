@@ -13,11 +13,11 @@ from .db import ConsultaSession, Patient, audit
 
 PATIENTS = [
     # gold_id, nome, nascimento, telefone, e-mail, profissão
-    ("G01", "Marina Albuquerque", "1974-03-14", "(11) 90000-0101", "marina.fict@example.com", "Professora"),
-    ("G02", "João Pedro Siqueira", "1988-09-02", "(11) 90000-0102", "joao.fict@example.com", "Analista de sistemas"),
-    ("G03", "Helena Tavares", "1997-06-21", "(11) 90000-0103", "helena.fict@example.com", "Designer"),
-    ("G04", "Carlos Eduardo Lemos", "1965-01-30", "(11) 90000-0104", "carlos.fict@example.com", "Comerciante"),
-    ("G05", "Beatriz Nogueira", "1982-11-08", "(11) 90000-0105", "beatriz.fict@example.com", "Advogada"),
+    ("G01", "Marina Albuquerque", "1974-03-14", "(11) 90000-0101", "marina.fict@example.com", "Professora", "F"),
+    ("G02", "João Pedro Siqueira", "1988-09-02", "(11) 90000-0102", "joao.fict@example.com", "Analista de sistemas", "M"),
+    ("G03", "Helena Tavares", "1997-06-21", "(11) 90000-0103", "helena.fict@example.com", "Designer", "F"),
+    ("G04", "Carlos Eduardo Lemos", "1965-01-30", "(11) 90000-0104", "carlos.fict@example.com", "Comerciante", "M"),
+    ("G05", "Beatriz Nogueira", "1982-11-08", "(11) 90000-0105", "beatriz.fict@example.com", "Advogada", "F"),
 ]
 def d(days_ago: int, hh: int = 9, mm: int = 30) -> str:
     """Datas RELATIVAS a hoje, para o demo sempre ter histórico recente e um atendimento 'de hoje'."""
@@ -70,8 +70,8 @@ def _add_session(s: Session, p: Patient, kind: str, date: str, utts: list[dict],
 def seed(s: Session) -> None:
     gold = {t["id"]: t for t in load_gold()["transcripts"]}
     by_gold: dict[str, Patient] = {}
-    for gid, name, birth, phone, email, prof in PATIENTS:
-        p = Patient(name=name, birth_date=birth, phone=phone, email=email, profession=prof, consent_lgpd=True, consent_at=ANAMNESE_DATES[gid])
+    for gid, name, birth, phone, email, prof, sex in PATIENTS:
+        p = Patient(name=name, birth_date=birth, phone=phone, email=email, profession=prof, sex=sex, consent_lgpd=True, consent_at=ANAMNESE_DATES[gid])
         s.add(p)
         s.flush()
         by_gold[gid] = p

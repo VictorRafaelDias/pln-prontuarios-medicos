@@ -43,6 +43,15 @@ ANTHROPIC_MODEL=claude-opus-5-5     # ou claude-sonnet-5-5 / claude-haiku-5-5 (m
 
 Sem chave, o sistema funciona 100% com o PLN clássico e mostra o selo **“Somente PLN clássico”**. O custo exibido no Laboratório é uma **estimativa** (preços de referência embutidos, ajustáveis no `.env`).
 
+### Simulação com voz
+
+O botão **Simular consulta** pode "falar" a transcrição em voz alta (ótimo para apresentar). Usa a **síntese de voz do navegador** (Web Speech `speechSynthesis`): gratuita, sem chave de API e **sem enviar nada pela internet** — usa as vozes em português instaladas no sistema (no Windows, por exemplo, "Microsoft Maria" e "Microsoft Daniel").
+
+- **Paciente:** a voz segue o **sexo cadastrado** (feminino → voz feminina, masculino → voz masculina, outro/não informado → voz neutra distinta da do profissional).
+- **Profissional:** por padrão **automática** (voz oposta à do paciente, para as duas serem sempre distintas); pode fixar masculina ou feminina em *Configurações*.
+- O botão **Voz** (ao lado de "Simular consulta") liga/desliga o áudio, permite escolher outra voz instalada para cada papel, ajustar a velocidade e **testar** antes de apresentar.
+- Se o navegador não tiver voz em português, a simulação continua só com texto. O áudio só toca depois de um clique (regra dos navegadores) — o próprio botão de simular conta.
+
 ### Uso no Chrome e privacidade
 
 A Web Speech API do Chrome **envia o áudio para servidores do Google** para transcrever. Os demais dados ficam na sua máquina (SQLite local). Em navegadores sem suporte há um aviso e a opção de **digitar/colar** a transcrição. Há também o botão **Simular consulta**, que “fala” uma transcrição fictícia (com negações, ex-hábitos, números por extenso, incerteza e oralidade) para testar sem microfone. O consentimento LGPD é obrigatório para salvar.

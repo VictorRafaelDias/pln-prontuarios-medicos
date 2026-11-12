@@ -103,7 +103,8 @@ def clinical_pdf(clinic: dict, patient: dict, sessions: list[dict], title: str) 
     story: list = []
     _header(story, st, clinic, title)
     info = [["Paciente", patient.get("name", ""), "Nascimento", patient.get("birth_date", "")],
-            ["Telefone", patient.get("phone", ""), "Profissão", patient.get("profession", "")]]
+            ["Telefone", patient.get("phone", ""), "Profissão", patient.get("profession", "")],
+            ["Sexo", {"F": "Feminino", "M": "Masculino", "O": "Outro / não informado"}.get(patient.get("sex", ""), ""), "E-mail", patient.get("email", "")]]
     t = Table([[Paragraph(_safe(c), st["body"]) for c in r] for r in info], colWidths=[2.4 * cm, 6.6 * cm, 2.4 * cm, 5.6 * cm])
     t.setStyle(TableStyle([("BACKGROUND", (0, 0), (0, -1), colors.HexColor("#F5F1E6")), ("BACKGROUND", (2, 0), (2, -1), colors.HexColor("#F5F1E6")),
                            ("BOX", (0, 0), (-1, -1), 0.5, colors.HexColor("#CFC8B6")), ("INNERGRID", (0, 0), (-1, -1), 0.25, colors.HexColor("#DDD8CC"))]))

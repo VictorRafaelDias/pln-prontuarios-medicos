@@ -27,6 +27,7 @@ class Patient(SQLModel, table=True):
     phone: str = ""
     email: str = ""
     profession: str = ""
+    sex: str = ""   # "F" | "M" | "O" | "" (usado para escolher a voz do paciente na simulação)
     consent_lgpd: bool = False
     consent_at: str = ""
     created_at: str = Field(default_factory=now)
@@ -86,6 +87,20 @@ class LabCache(SQLModel, table=True):
 
 def init_db() -> None:
     SQLModel.metadata.create_all(engine)
+    migrate()
+
+
+def migrate(eng=None) -> None:
+    """Migração leve: acrescenta colunas novas a bancos criados por versões anteriores (create_all não altera tabelas existentes)."""
+    from sqlalchemy import text
+    with (eng or engine).begin() as con:
+        cols = {r[1] for r in con.execute(text("PRAGMA table_info(patient)"))}
+        if "sex" not in cols:
+            con.execute(text("ALTER TABLE patient ADD COLUMN sex VARCHAR NOT NULL DEFAULT ''"))
+            # os 5 pacientes FICTÍCIOS do seed ganham o sexo (as vozes da simulação dependem dele)
+            for name, sex in (("Marina Albuquerque", "F"), ("João Pedro Siqueira", "M"), ("Helena Tavares", "F"),
+                              ("Carlos Eduardo Lemos", "M"), ("Beatriz Nogueira", "F")):
+                con.execute(text("UPDATE patient SET sex = :s WHERE name = :n AND sex = ''"), {"s": sex, "n": name})
 
 
 def get_session():
@@ -94,7 +109,7 @@ def get_session():
 
 
 DEFAULT_SETTINGS = {"clinic_name": "Clínica Qi — Acupuntura", "professional_name": "Dr(a). Acupunturista", "speech_lang": "pt-BR",
-                    "clinic_address": "", "clinic_phone": ""}
+                    "clinic_address": "", "clinic_phone": "", "professional_voice": "auto"}
 
 
 def get_setting(s: Session, key: str):

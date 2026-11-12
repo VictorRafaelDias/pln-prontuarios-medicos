@@ -40,6 +40,11 @@ async def lifespan(app: FastAPI):
 
 
 KINDS = ("anamnese", "soap")
+
+
+def clean_sex(v) -> str:
+    """Sexo cadastral para escolher a voz: F, M, O (outro/prefere não informar) ou vazio."""
+    return v if v in ("F", "M", "O") else ""
 app = FastAPI(title="Prontuário Qi", version="1.0.0", lifespan=lifespan)
 app.add_middleware(CORSMiddleware, allow_origins=[], allow_origin_regex=r"^https?://(localhost|127\.0\.0\.1)(:\d+)?$", allow_methods=["*"], allow_headers=["*"])
 app.include_router(lab_router, prefix="/api/lab")
@@ -132,7 +137,9 @@ def update_patient(pid: int, body: dict = Body(...), s: Session = Depends(get_se
         raise HTTPException(404)
     if "name" in body and not str(body["name"] or "").strip():
         raise HTTPException(422, "O nome do paciente não pode ficar vazio.")
-    for k in ("name", "birth_date", "phone", "email", "profession"):
+    if "sex" in body:
+        body = {**body, "sex": clean_sex(body["sex"])}
+    for k in ("name", "birth_date", "phone", "email", "profession", "sex"):
         if k in body and body[k] != getattr(p, k):
             audit(s, "editar_dados", pid, field=k, old=getattr(p, k), new=body[k])
             setattr(p, k, body[k])
@@ -172,7 +179,8 @@ def create_session(body: dict = Body(...), s: Session = Depends(get_session)):
         p = s.get(Patient, pid)
         if not p:
             raise HTTPException(404, "Paciente não encontrado")
-        pdata = {"name": p.name, "birth_date": p.birth_date, "phone": p.phone, "email": p.email, "profession": p.profession, "consent_lgpd": p.consent_lgpd}
+        pdata = {"name": p.name, "birth_date": p.birth_date, "phone": p.phone, "email": p.email, "profession": p.profession, "sex": p.sex,
+                 "consent_lgpd": p.consent_lgpd}
     x = ConsultaSession(kind=kind, patient_id=pid, patient_data=pdata, status="draft")
     s.add(x)
     s.commit()
@@ -233,7 +241,7 @@ def save_session(sid: int, body: dict = Body(...), s: Session = Depends(get_sess
         raise HTTPException(422, "É obrigatório o consentimento LGPD para dados de saúde e transcrição.")
     if p is None:
         p = Patient(name=pdata["name"].strip(), birth_date=pdata.get("birth_date", ""), phone=pdata.get("phone", ""), email=pdata.get("email", ""),
-                    profession=pdata.get("profession", ""), consent_lgpd=True, consent_at=now())
+                    profession=pdata.get("profession", ""), sex=clean_sex(pdata.get("sex")), consent_lgpd=True, consent_at=now())
         s.add(p)
         s.commit()
         s.refresh(p)
@@ -349,7 +357,9 @@ def get_settings(s: Session = Depends(get_session)):
 
 @app.put("/api/settings")
 def put_settings(body: dict = Body(...), s: Session = Depends(get_session)):
-    for k in ("clinic_name", "professional_name", "speech_lang", "clinic_address", "clinic_phone"):
+    if "professional_voice" in body and body["professional_voice"] not in ("auto", "masculina", "feminina"):
+        raise HTTPException(422, "professional_voice deve ser 'auto', 'masculina' ou 'feminina'.")
+    for k in ("clinic_name", "professional_name", "speech_lang", "clinic_address", "clinic_phone", "professional_voice"):
         if k in body:
             s.merge(AppSetting(key=k, value=body[k]))
     s.commit()

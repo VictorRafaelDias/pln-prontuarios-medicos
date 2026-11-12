@@ -1,18 +1,19 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
-import { AlertTriangle, Check, FileDown, FlaskConical, Mic, Pause, Play, Save, Send, Trash2, Wand2, ArrowLeft, Pencil } from "lucide-react";
+import { AlertTriangle, Check, FileDown, FlaskConical, Mic, Pause, Play, Save, Send, Trash2, Wand2, ArrowLeft, Pencil, Volume2, VolumeX } from "lucide-react";
 import { api, Form, FieldState, Utt, Speaker } from "@/lib/api";
 import { speechSupported, useSpeech } from "@/lib/speech";
+import { assignVoices, estimateMs, speak, stopSpeaking, ttsSupported, useVoices, usePrefs, voiceGender } from "@/lib/tts";
 import { cn, fmtClock, fmtDate, isEmpty } from "@/lib/utils";
 import { useApp } from "@/App";
 import { FormView } from "@/components/FormView";
-import { Badge, Button, Card, CardContent, CardHeader, CardTitle, Dialog, DialogContent, DialogDescription, DialogTitle, Input, Label, Progress, Select, Skeleton, Textarea } from "@/components/ui";
+import { Badge, Button, Card, CardContent, CardHeader, CardTitle, Dialog, DialogContent, DialogDescription, DialogTitle, Input, Label, Popover, PopoverContent, PopoverTrigger, Progress, Select, Skeleton, Switch, Textarea } from "@/components/ui";
 
 /* ------------------------------------------------------------------ Passo 1: dados básicos + LGPD */
 function Step1() {
   const nav = useNavigate();
-  const [d, setD] = useState({ name: "", birth_date: "", phone: "", email: "", profession: "", consent_lgpd: false });
+  const [d, setD] = useState({ name: "", birth_date: "", phone: "", email: "", profession: "", sex: "", consent_lgpd: false });
   const [busy, setBusy] = useState(false);
   const set = (k: string, v: any) => setD((x) => ({ ...x, [k]: v }));
   const go = async () => {
@@ -32,6 +33,8 @@ function Step1() {
         <div className="space-y-1.5"><Label>Telefone</Label><Input value={d.phone} onChange={(e) => set("phone", e.target.value)} placeholder="(11) 90000-0000" /></div>
         <div className="space-y-1.5"><Label>E-mail</Label><Input type="email" value={d.email} onChange={(e) => set("email", e.target.value)} /></div>
         <div className="space-y-1.5"><Label>Profissão</Label><Input value={d.profession} onChange={(e) => set("profession", e.target.value)} /></div>
+        <div className="space-y-1.5"><Label>Sexo <span className="font-normal text-muted-foreground">(escolhe a voz do paciente na simulação)</span></Label>
+          <Select className="w-full" value={d.sex} onChange={(e) => set("sex", e.target.value)}><option value="">Não informado</option><option value="F">Feminino</option><option value="M">Masculino</option><option value="O">Outro / prefere não informar</option></Select></div>
         <label className="flex cursor-pointer items-start gap-3 rounded-md border bg-secondary/50 p-3 text-sm sm:col-span-2">
           <input type="checkbox" className="mt-1 size-4 accent-[hsl(var(--primary))]" checked={d.consent_lgpd} onChange={(e) => set("consent_lgpd", e.target.checked)} />
           <span><b>Consentimento LGPD (obrigatório).</b> O paciente autoriza o tratamento de seus dados de saúde e a gravação/transcrição da consulta para fins de documentação clínica. A transcrição é processada localmente; o reconhecimento de voz do Chrome envia o áudio aos servidores do Google.</span>
@@ -71,6 +74,14 @@ function Editor({ sid }: { sid: number }) {
   const [pdata, setPdata] = useState<any>({});
   const [dataOpen, setDataOpen] = useState(false);
   const [saving, setSaving] = useState(false);
+  const voices = useVoices();
+  const [prefs, setPrefs] = usePrefs();
+  const [voiceOn, setVoiceOn] = useState(() => localStorage.getItem("qi:voiceOn") !== "0");
+  const toggleVoice = (on: boolean) => { setVoiceOn(on); localStorage.setItem("qi:voiceOn", on ? "1" : "0"); if (!on) stopSpeaking(); };
+  const profSetting = status?.settings.professional_voice ?? "auto";
+  // automática: o profissional recebe a voz OPOSTA à do paciente (assim as duas vozes são sempre distintas)
+  const profGender = profSetting === "feminina" ? "f" : profSetting === "masculina" ? "m" : pdata.sex === "M" ? "f" : "m";
+  const assigned = useMemo(() => assignVoices(voices, pdata.sex, profGender, prefs), [voices, pdata.sex, profGender, prefs]);
 
   const formRef = useRef(form); formRef.current = form;
   const uttsRef = useRef(utts); uttsRef.current = utts;
@@ -166,16 +177,27 @@ function Editor({ sid }: { sid: number }) {
   const simulate = async () => {
     const demo = demos.find((d) => d.id === demoId);
     if (!demo) return;
-    if (simulating) { simAbort.current = true; return; }
+    if (simulating) { simAbort.current = true; stopSpeaking(); return; }
     simAbort.current = false;
     setSimulating(true);
     for (const u of demo.utterances as { speaker: Speaker; text: string }[]) {
       if (simAbort.current) break;
       const words = u.text.split(" ");
-      for (let i = 1; i <= words.length; i++) {
-        if (simAbort.current) break;
-        setInterim({ speaker: u.speaker, text: words.slice(0, i).join(" ") });
-        await new Promise((r) => setTimeout(r, 70));
+      if (voiceOn && ttsSupported && voices.length) {
+        // fala com a voz do papel (paciente × profissional) e "digita" as palavras em sincronia
+        const who = u.speaker === "profissional" ? assigned.professional : assigned.patient;
+        const step = estimateMs(u.text, prefs.rate) / words.length;
+        let shown = 0;
+        setInterim({ speaker: u.speaker, text: words[0] });
+        const timer = setInterval(() => { shown = Math.min(words.length, shown + 1); setInterim({ speaker: u.speaker, text: words.slice(0, Math.max(1, shown)).join(" ") }); }, step);
+        await speak(u.text, who, prefs.rate);
+        clearInterval(timer);
+      } else {
+        for (let i = 1; i <= words.length; i++) {
+          if (simAbort.current) break;
+          setInterim({ speaker: u.speaker, text: words.slice(0, i).join(" ") });
+          await new Promise((r) => setTimeout(r, 70));
+        }
       }
       setInterim(null);
       if (simAbort.current) break;
@@ -295,6 +317,24 @@ function Editor({ sid }: { sid: number }) {
             <div className="flex flex-wrap items-center gap-2">
               <Select value={demoId} onChange={(e) => setDemoId(e.target.value)} className="h-8 max-w-[15rem] text-xs" disabled={simulating}>{demos.filter((d) => d.mode === mode).map((d) => <option key={d.id} value={d.id}>{d.id} — {d.title}</option>)}</Select>
               <Button size="sm" variant="accent" onClick={simulate}>{simulating ? <><Pause /> Parar</> : <><Wand2 /> Simular consulta</>}</Button>
+              {ttsSupported && (
+                <Popover>
+                  <PopoverTrigger asChild><Button size="sm" variant={voiceOn ? "outline" : "ghost"} title="Vozes da simulação" aria-label="Vozes da simulação">{voiceOn ? <Volume2 /> : <VolumeX />} Voz</Button></PopoverTrigger>
+                  <PopoverContent className="w-80 space-y-3" align="start">
+                    <label className="flex items-center justify-between text-sm font-medium">Falar a simulação em voz alta<Switch checked={voiceOn} onCheckedChange={toggleVoice} /></label>
+                    {voices.length === 0 ? <p className="text-xs text-muted-foreground">Nenhuma voz em português encontrada neste navegador/sistema. A simulação continua só com texto.</p> : (
+                      <>
+                        {([["patient", `Paciente (${pdata.sex === "F" ? "feminino" : pdata.sex === "M" ? "masculino" : "não informado"})`, assigned.patient], ["professional", `Profissional (${profGender === "f" ? "feminina" : "masculina"}${profSetting === "auto" ? ", automática" : ""})`, assigned.professional]] as const).map(([k, label, a]) => (
+                          <div key={k} className="space-y-1"><div className="flex items-center justify-between"><Label className="text-xs">{label}</Label>
+                            <Button size="sm" variant="ghost" className="h-6 px-2 text-[11px]" onClick={() => { stopSpeaking(); speak(k === "patient" ? "Bom dia, doutora. Estou com dor lombar há três meses." : "Bom dia. Conte-me o que está sentindo.", a, prefs.rate); }}>Testar</Button></div>
+                            <Select className="h-8 w-full text-xs" value={a.voice?.voiceURI ?? ""} onChange={(e) => setPrefs({ [k]: e.target.value })}>
+                              {voices.map((v) => <option key={v.voiceURI} value={v.voiceURI}>{v.name} ({voiceGender(v) === "f" ? "fem." : voiceGender(v) === "m" ? "masc." : "?"})</option>)}</Select></div>))}
+                        <div className="space-y-1"><Label className="text-xs">Velocidade: {prefs.rate.toFixed(1)}×</Label>
+                          <input type="range" min={0.7} max={1.4} step={0.1} value={prefs.rate} onChange={(e) => setPrefs({ rate: Number(e.target.value) })} className="w-full accent-[hsl(var(--primary))]" /></div>
+                        <p className="text-[11px] text-muted-foreground">A voz do paciente segue o sexo cadastrado; a do profissional vem de Configurações. Usa as vozes instaladas no seu sistema (nada é enviado pela internet).</p>
+                      </>)}
+                  </PopoverContent>
+                </Popover>)}
               <Button size="sm" variant="ghost" onClick={() => setPasteOpen(!pasteOpen)}>Digitar / colar</Button>
               {!speechSupported && <Badge variant="warn">Sem reconhecimento de voz neste navegador</Badge>}
             </div>
@@ -343,6 +383,7 @@ function Editor({ sid }: { sid: number }) {
           <div className="grid gap-3">
             {[["name", "Nome"], ["birth_date", "Nascimento"], ["phone", "Telefone"], ["email", "E-mail"], ["profession", "Profissão"]].map(([k, l]) => (
               <div key={k} className="space-y-1"><Label>{l}</Label><Input type={k === "birth_date" ? "date" : "text"} value={pdata[k] ?? ""} disabled={!!sess.patient_id} onChange={(e) => setPdata({ ...pdata, [k]: e.target.value })} /></div>))}
+            <div className="space-y-1"><Label>Sexo (voz do paciente na simulação)</Label><Select className="w-full" value={pdata.sex ?? ""} disabled={!!sess.patient_id} onChange={(e) => setPdata({ ...pdata, sex: e.target.value })}><option value="">Não informado</option><option value="F">Feminino</option><option value="M">Masculino</option><option value="O">Outro / prefere não informar</option></Select></div>
             <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={!!pdata.consent_lgpd} disabled={!!sess.patient_id} onChange={(e) => setPdata({ ...pdata, consent_lgpd: e.target.checked })} /> Consentimento LGPD</label>
           </div>
           <Button onClick={() => { setDataOpen(false); dirty.current = true; }}>Concluir</Button>

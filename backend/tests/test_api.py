@@ -171,3 +171,42 @@ def test_editar_stopwords_preservadas(c):
         assert any(h["text"].lower() == "bem" for h in sw["preserved_hits"])
     finally:
         c.put("/api/lab/resources/stopwords_custom", json=original)
+
+
+# ------------------------------------------------------------------ sexo do paciente e voz do profissional (simulação com voz)
+def test_sexo_do_paciente_e_validado_e_persistido(c):
+    pats = {p["name"]: p for p in c.get("/api/patients").json()}
+    assert pats["Marina Albuquerque"]["sex"] == "F" and pats["João Pedro Siqueira"]["sex"] == "M"
+    s = c.post("/api/sessions", json={"kind": "anamnese", "patient_data": {"name": "Paciente Sexo", "consent_lgpd": True, "sex": "M"}}).json()
+    pid = c.post(f"/api/sessions/{s['id']}/save", json={"form": {}, "transcript": [], "patient_data": {"name": "Paciente Sexo", "consent_lgpd": True, "sex": "M"}}).json()["patient_id"]
+    assert c.get(f"/api/patients/{pid}").json()["sex"] == "M"
+    # valor inválido vira vazio; sessão nova de paciente existente herda o sexo
+    assert c.put(f"/api/patients/{pid}", json={"sex": "qualquer"}).json()["sex"] == ""
+    c.put(f"/api/patients/{pid}", json={"sex": "F"})
+    assert c.post("/api/sessions", json={"kind": "soap", "patient_id": pid}).json()["patient_data"]["sex"] == "F"
+    pdf = c.get(f"/api/patients/{pid}/pdf")
+    assert pdf.status_code == 200 and pdf.content[:4] == b"%PDF"
+
+
+def test_voz_do_profissional_nas_configuracoes(c):
+    assert c.get("/api/settings").json()["settings"]["professional_voice"] in ("auto", "masculina", "feminina")
+    assert c.put("/api/settings", json={"professional_voice": "robotica"}).status_code == 422
+    assert c.put("/api/settings", json={"professional_voice": "feminina"}).json()["settings"]["professional_voice"] == "feminina"
+    c.put("/api/settings", json={"professional_voice": "auto"})
+
+
+def test_migracao_adiciona_coluna_sex_em_banco_antigo(tmp_path):
+    import sqlite3
+    from sqlalchemy import create_engine
+    from app.db import migrate
+    f = tmp_path / "antigo.db"
+    con = sqlite3.connect(f)
+    con.execute("CREATE TABLE patient (id INTEGER PRIMARY KEY, name VARCHAR NOT NULL)")
+    con.executemany("INSERT INTO patient (name) VALUES (?)", [("Marina Albuquerque",), ("João Pedro Siqueira",), ("Outra Pessoa",)])
+    con.commit()
+    con.close()
+    eng = create_engine(f"sqlite:///{f}")
+    migrate(eng)
+    migrate(eng)  # idempotente
+    rows = dict(sqlite3.connect(f).execute("SELECT name, sex FROM patient").fetchall())
+    assert rows == {"Marina Albuquerque": "F", "João Pedro Siqueira": "M", "Outra Pessoa": ""}
