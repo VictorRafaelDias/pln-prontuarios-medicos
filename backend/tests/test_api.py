@@ -144,3 +144,30 @@ def test_falha_do_llm_nao_derruba_o_pipeline(c, monkeypatch):
     assert r.status_code == 200
     j = r.json()
     assert "rede indisponível" in j["llm"]["error"] and j["fields"]["queixa.eva"]["source"] == "rules"
+
+
+def test_editar_gatilhos_de_negacao_reprocessa(c):
+    """Editor de gatilhos: um gatilho novo passa a negar entidades imediatamente (sem reiniciar)."""
+    original = c.get("/api/lab/resources/negation_triggers").json()
+    texto = {"text": "Paciente: Livre de dor no joelho. Nota 3."}
+    try:
+        antes = c.post("/api/lab/analyze", json=texto).json()
+        assert not any(e["negated"] for e in antes["entities"] if e["text"].lower() == "dor")
+        novo = {**original, "pre": original["pre"] + [{"text": "livre de", "window": 4}]}
+        assert c.put("/api/lab/resources/negation_triggers", json=novo).json()["ok"]
+        depois = c.post("/api/lab/analyze", json=texto).json()
+        assert any(e["negated"] for e in depois["entities"] if e["text"].lower() == "dor")
+    finally:
+        c.put("/api/lab/resources/negation_triggers", json=original)
+
+
+def test_editar_stopwords_preservadas(c):
+    original = c.get("/api/lab/resources/stopwords_custom").json()
+    try:
+        novo = {**original, "preserve": {**original["preserve"], "intensidade": original["preserve"]["intensidade"] + ["bem"]}}
+        c.put("/api/lab/resources/stopwords_custom", json=novo)
+        a = c.post("/api/lab/analyze", json={"text": "Paciente: Estou bem cansada."}).json()
+        sw = next(s for s in a["stages"] if s["id"] == "stopwords")["output"]
+        assert any(h["text"].lower() == "bem" for h in sw["preserved_hits"])
+    finally:
+        c.put("/api/lab/resources/stopwords_custom", json=original)

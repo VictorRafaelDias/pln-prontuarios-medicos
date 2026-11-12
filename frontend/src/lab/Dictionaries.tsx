@@ -4,6 +4,7 @@ import { Plus, RefreshCw, Save, Trash2 } from "lucide-react";
 import { api } from "@/lib/api";
 import { fold } from "@/lib/utils";
 import { Badge, Button, Card, CardContent, CardHeader, CardTitle, Input, Skeleton, Textarea } from "@/components/ui";
+import { NormalizationEditor, StopwordsEditor, TriggersEditor } from "@/lab/ConfigEditors";
 
 interface Entry { canonical: string; variants: string[]; attrs?: Record<string, any> }
 interface Res { name: string; kind: string; label: string | null; entries: number | null; description: string }
@@ -26,6 +27,9 @@ export default function Dictionaries({ onSaved }: { onSaved: () => void }) {
   }, [sel]);
 
   const isDict = data && Array.isArray(data.entries);
+  const STRUCTURED: Record<string, any> = { negation_triggers: TriggersEditor, stopwords_custom: StopwordsEditor, normalization: NormalizationEditor };
+  const Structured = STRUCTURED[sel];
+  const setWhole = (d: any) => { setData(d); setRaw(JSON.stringify(d, null, 2)); setDirty(true); };
   const cur = list.find((r) => r.name === sel);
 
   const setEntry = (i: number, patch: Partial<Entry>) => {
@@ -68,14 +72,14 @@ export default function Dictionaries({ onSaved }: { onSaved: () => void }) {
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div><span className="font-mono text-sm font-semibold">{sel}.json</span> {cur?.label && <Badge variant="default">{cur.label}</Badge>}</div>
                 <div className="flex gap-2">
-                  {isDict && <Button size="sm" variant="ghost" onClick={() => setRawMode(!rawMode)}>{rawMode ? "Editor em tabela" : "Editar JSON"}</Button>}
+                  {(isDict || Structured) && <Button size="sm" variant="ghost" onClick={() => setRawMode(!rawMode)}>{rawMode ? "Editor estruturado" : "Editar JSON"}</Button>}
                   <Button size="sm" onClick={save} disabled={busy || (!dirty && !rawMode)}><Save /> Salvar e reprocessar</Button>
                 </div>
               </div>
               <p className="text-xs text-muted-foreground">{data.description ?? data._doc ?? cur?.description}</p>
               <p className="text-xs text-muted-foreground"><RefreshCw className="mr-1 inline size-3" />Ao salvar, o EntityRuler é reconstruído na hora e a análise atual é refeita.</p>
             </CardContent></Card>
-            {isDict && !rawMode ? (
+            {Structured && !rawMode ? <Structured data={data} onChange={setWhole} /> : isDict && !rawMode ? (
               <Card><CardContent className="space-y-3 p-4">
                 <div className="flex gap-2"><Input placeholder="Filtrar entradas…" value={q} onChange={(e) => setQ(e.target.value)} /><Button variant="outline" onClick={addEntry}><Plus /> Nova entrada</Button></div>
                 <div className="max-h-[32rem] space-y-2 overflow-auto pr-1">

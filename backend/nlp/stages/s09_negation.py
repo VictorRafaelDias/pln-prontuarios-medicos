@@ -98,7 +98,8 @@ class NegationStage(Stage):
             if te <= ts:
                 continue
             sent_ents = [e for e in ents if e["sent"] == si and e["tok_start"] is not None]
-            ent_tokens = {i for e in sent_ents for i in range(e["tok_start"], e["tok_end"])}
+            # só entidades CLÍNICAS bloqueiam gatilhos (um 'Livre' reconhecido como nome próprio pelo spaCy não pode engolir o gatilho)
+            ent_tokens = {i for e in sent_ents if e["clinical"] for i in range(e["tok_start"], e["tok_end"])}
             matches = _find(norm, ts, te, triggers)
             by_kind: dict[str, list[tuple[int, int, Trig]]] = {}
             for m in matches:

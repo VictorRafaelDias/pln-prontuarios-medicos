@@ -118,7 +118,11 @@ def clinical_pdf(clinic: dict, patient: dict, sessions: list[dict], title: str) 
     for s in sessions:
         story.append(Spacer(1, 8))
         label = "Anamnese e primeira conduta" if s["kind"] == "anamnese" else "Sessão de evolução (SOAP)"
-        story.append(Paragraph(_safe(f"{label} — {s.get('date', '')[:10]}"), st["h1"].clone("h1b", fontSize=13, textColor=TERRA)))
+        try:
+            when = datetime.fromisoformat(str(s.get("date", ""))).strftime("%d/%m/%Y %H:%M")
+        except ValueError:
+            when = str(s.get("date", ""))[:10]
+        story.append(Paragraph(_safe(f"{label} — {when}"), st["h1"].clone("h1b", fontSize=13, textColor=TERRA)))
         secs = [x["id"] for x in SECTIONS if s["kind"] in x["modes"]]
         _section_table(story, st, s["form"], secs)
     story.append(Spacer(1, 18))

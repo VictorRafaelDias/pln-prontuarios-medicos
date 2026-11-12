@@ -266,6 +266,11 @@ class Mapper:
     def _pain_ctx(self, si: int) -> bool:
         if any(self._is_pain(e) and affirmed(e) for e in self.by_sent.get(si, [])):
             return True
+        # "É o joelho direito. Dói demais para subir escada.": a parte do corpo e a dor ficam em frases vizinhas da MESMA fala
+        utt = self.sents[si]["utt"]
+        for nb in (si - 1, si + 1):
+            if 0 <= nb < len(self.sents) and self.sents[nb]["utt"] == utt and self.sents[nb]["speaker"] == "paciente"                     and any(self._is_pain(e) and affirmed(e) for e in self.by_sent.get(nb, [])):
+                return True
         qa = self.qa.get(si)
         return bool(qa and PAIN_Q.search(qa["q_text"]) and any(e["label"] == "PARTE_CORPO" for e in self.by_sent.get(si, [])))
 
@@ -433,15 +438,20 @@ class Mapper:
                         self.add("queixa.horario_pior", e["attrs"]["opcao"], 0.85 * e["conf"] / 0.9, s["idx"], e["rule"] + " + gatilho de piora", [e])
 
     # ------------------------------------------------------------------ piora / melhora
-    def _infinitive(self, span) -> str | None:
+    def _infinitive(self, span, force_verb: bool = False) -> str | None:
         """Verbo no infinitivo a partir do lema do spaCy, validado contra o vocabulário (evita 'carregir')."""
         tok = span[0]
         word = tok.text.lower()
         stem = word[:-1] if word.endswith("o") else word
-        for cand in (tok.lemma_.lower(), stem + "ar", stem + "er", stem + "ir"):
+        lemma = tok.lemma_.lower()
+        for cand in (lemma, stem + "ar", stem + "er", stem + "ir"):
             if cand != word and cand.endswith(("ar", "er", "ir")) and tok.vocab.has_vector(cand):
                 return cand
-        return None
+        # sem evidência no vocabulário: só confia no lema do spaCy quando é da 1ª conjugação (-ar), a mais regular
+        if lemma != word and lemma.endswith("ar"):
+            return lemma
+        # "quando eu caminho": depois de "eu" a palavra é verbo na 1ª pessoa, mesmo que o tagger a veja como substantivo
+        return stem + "ar" if force_verb and word.endswith("o") and len(word) > 4 else None
 
     def _split_items(self, phrase: str, base: int) -> list[str]:
         """Divide 'carrego peso e à noite, quando deito em cima dele' em itens e põe o verbo no infinitivo."""
@@ -454,6 +464,7 @@ class Mapper:
             if re.fullmatch(r"\s+e\s+|\s+ou\s+|\s*,\s*", part):
                 continue
             lead = re.match(r"^(?:\s*(?:quando|com|o|a|os|as|um|uma|eu|me|se|de|do|da|no|na|ao|à)\s+)+", raw, re.I)
+            had_eu = bool(lead and re.search(r"\beu\b", lead.group(0), re.I))
             if lead:
                 raw, off = raw[lead.end():], off + lead.end()
             raw = raw.strip(" .")
@@ -462,8 +473,8 @@ class Mapper:
             w = re.match(r"\w+", raw)
             if w:
                 span = self.doc.char_span(off, off + w.end(), alignment_mode="contract")
-                if span is not None and len(span) == 1 and span[0].pos_ in ("VERB", "AUX"):
-                    inf = self._infinitive(span)
+                if span is not None and len(span) == 1 and (span[0].pos_ in ("VERB", "AUX") or had_eu):
+                    inf = self._infinitive(span, force_verb=had_eu)
                     if inf:
                         raw = inf + raw[w.end():]
             out.append(cap(raw))
@@ -495,7 +506,7 @@ class Mapper:
         if e["former"]:
             return "ex"
         if e["negated"]:
-            return "ex" if re.search(r"desde", s["text"], re.I) else "nunca"  # "não bebo desde que descobri..." → parou
+            return "ex" if re.search(r"\bdesde\b", s["text"], re.I) else "nunca"  # "não bebo desde que descobri..." → parou
         if e.get("tense") == "past" and not PRESENT_RX.search(s["text"]):
             return "ex"
         return "atual"

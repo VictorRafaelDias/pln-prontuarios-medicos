@@ -24,7 +24,7 @@ npm run dev         # API (porta 8010) + frontend (http://localhost:5173) juntos
 ```
 
 Atalhos: `iniciar.bat` (Windows) ou `./iniciar.sh` (Linux/macOS) fazem tudo e abrem o navegador.
-Outros comandos: `npm test` (pytest: 54 testes — unidade por etapa, integração da API, backup/restauração, CORS, falha do LLM) · `npm run eval` (avaliação).
+Outros comandos: `npm test` (pytest: 56 testes — unidade por etapa, integração da API, backup/restauração, CORS, falha do LLM) · `npm run eval` (avaliação).
 
 Para subir sem abrir o navegador: `NO_BROWSER=1` antes do script. Se a porta 8000 do seu computador estiver ocupada, nada muda: a API usa a **8010** (`API_PORT` no `.env`).
 
@@ -47,9 +47,11 @@ A Web Speech API do Chrome **envia o áudio para servidores do Google** para tra
 
 O formulário de localização usa um **mapa corporal SVG clicável** (frente/costas).
 
-Atalhos: **Espaço** grava/pausa (fora de campos) · **Ctrl+S** vai à revisão · **Ctrl+K** abre a busca global (pacientes, queixas, padrões de MTC, pontos).
+Atalhos: **Espaço** grava/pausa (fora de campos) · **Ctrl+S** salva o rascunho (na tela de revisão, salva no prontuário) · **Ctrl+K** abre a busca global (pacientes, queixas, padrões de MTC, pontos).
 
 ## Telas
+
+O menu **Engrenagem** (barra lateral) agrupa o **Laboratório PLN**, as **Configurações** e o tema claro/escuro.
 
 Início · Nova consulta (dados + LGPD → transcrição ao vivo × formulário em tempo real → revisão) · Atualizar prontuário (nova sessão SOAP, com resumo da última sessão) · Pacientes (busca instantânea e filtros) · Prontuário (Anamnese, Sessões, Evolução da dor/EVA, Documentos, Histórico de alterações) · **Laboratório PLN** · Configurações (status do LLM, clínica, backup/restauração). PDF clínico com cabeçalho da clínica. Rascunho salvo automaticamente a cada 10 s.
 
@@ -57,7 +59,7 @@ Início · Nova consulta (dados + LGPD → transcrição ao vivo × formulário 
 
 ## Arquitetura do PLN
 
-O pipeline vive em `backend/nlp/`. Cada etapa é uma classe (`nlp/stages/sNN_*.py`) que recebe o estado da anterior e registra **entrada, saída e tempo (ms)**; o orquestrador é `nlp/pipeline.py`. Tudo pode ser inspecionado no **Laboratório PLN** (modo passo a passo, texto anotado, tabelas, estatísticas, comparativo Regras × LLM, avaliação, inspeção do LLM, **editor de dicionários com reprocessamento imediato** e exportação em JSON/HTML/PDF).
+O pipeline vive em `backend/nlp/`. Cada etapa é uma classe (`nlp/stages/sNN_*.py`) que recebe o estado da anterior e registra **entrada, saída e tempo (ms)**; o orquestrador é `nlp/pipeline.py`. Tudo pode ser inspecionado no **Laboratório PLN** (modo passo a passo, texto anotado, tabelas, estatísticas, comparativo Regras × LLM, avaliação, inspeção do LLM, **editores de dicionários, gatilhos de negação, stopwords preservadas e abreviações (tabela estruturada ou JSON) com reprocessamento imediato** e exportação em JSON/HTML/PDF).
 
 | # | Etapa | O que faz | Por que |
 |---|---|---|---|
@@ -92,7 +94,7 @@ O botão **Rodar avaliação** (Laboratório → Avaliação) calcula precisão,
 |---|---|---|---|
 | `gold_standard.json` | 10 | Desenvolvimento: escrito junto com as regras | **0,933** (otimista) |
 | `holdout.json` | 5 | Validação: 1ª medição às cegas = **0,856**; depois corrigi as causas gerais dos erros (verbos no infinitivo, negação posposta, etc.), então hoje (0,996) **já não é cego** | 0,996 (otimista) |
-| `blind.json` | 5 | **Conjunto cego**: escrito depois de congelar as regras, **medido uma única vez**, sem ajuste posterior | **0,905** (P 0,896 · R 0,915) |
+| `blind.json` | 5 | **Conjunto cego**: escrito depois de congelar as regras, **medido uma única vez** (regras do commit `9ccd3f0`); correções posteriores NÃO foram remedidas nele, para preservar a medição | **0,905** (P 0,896 · R 0,915) |
 
 O número a citar como estimativa de generalização é **≈ 0,90 (conjunto cego)**; a queda de 0,93 → 0,86/0,91 nos conjuntos novos mostra o quanto as regras estavam ajustadas ao gold. Mesmo o conjunto cego tem só 5 transcrições, escritas pelo mesmo autor das regras: é uma estimativa, não uma garantia.
 

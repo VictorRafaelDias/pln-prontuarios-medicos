@@ -192,7 +192,7 @@ function Editor({ sid }: { sid: number }) {
       const el = e.target as HTMLElement;
       const inField = ["INPUT", "TEXTAREA", "SELECT"].includes(el.tagName) || el.isContentEditable;
       if (e.code === "Space" && !inField && view === "edit") { e.preventDefault(); toggleRec(); }
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") { e.preventDefault(); view === "review" ? save() : (flush().then(() => toast.success("Rascunho salvo")), setView("review")); }
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") { e.preventDefault(); if (view === "review") save(); else flush().then(() => toast.success("Rascunho salvo")).catch((err) => toast.error(err.message)); }
     };
     window.addEventListener("keydown", h);
     return () => window.removeEventListener("keydown", h);

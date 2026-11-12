@@ -1,10 +1,10 @@
 import { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { NavLink, Route, Routes } from "react-router-dom";
 import { Toaster } from "sonner";
-import { Home as HomeIcon, UserPlus, ClipboardList, Users, FlaskConical, Settings, Moon, Sun, Leaf, Sparkles } from "lucide-react";
+import { Home as HomeIcon, UserPlus, ClipboardList, Users, FlaskConical, Settings, Moon, Sun, Leaf, Sparkles, Cog, ChevronUp } from "lucide-react";
 import { api, Schema, Status } from "@/lib/api";
 import { cn } from "@/lib/utils";
-import { Badge, TooltipProvider } from "@/components/ui";
+import { Badge, Popover, PopoverContent, PopoverTrigger, TooltipProvider } from "@/components/ui";
 import Home from "@/pages/Home";
 import Consulta from "@/pages/Consulta";
 import Atualizar from "@/pages/Atualizar";
@@ -62,16 +62,23 @@ export default function App() {
                 </NavLink>
               ))}
             </nav>
-            <div className="space-y-1 border-t pt-3">
-              <NavLink to="/laboratorio" className={({ isActive }) => cn("flex items-center gap-3 rounded-md px-3 py-2 text-sm hover:bg-secondary", isActive && "bg-primary/15 font-medium text-primary")}><FlaskConical className="size-4" />Laboratório PLN</NavLink>
-              <NavLink to="/configuracoes" className={({ isActive }) => cn("flex items-center gap-3 rounded-md px-3 py-2 text-sm hover:bg-secondary", isActive && "bg-primary/15 font-medium text-primary")}><Settings className="size-4" />Configurações</NavLink>
-              <button onClick={() => setDark(!dark)} className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm hover:bg-secondary">{dark ? <Sun className="size-4" /> : <Moon className="size-4" />}{dark ? "Modo claro" : "Modo escuro"}</button>
+            <div className="border-t pt-3">
+              <Popover>
+                <PopoverTrigger asChild>
+                  <button className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm hover:bg-secondary" aria-label="Engrenagem: Laboratório PLN e Configurações"><Cog className="size-4" />Engrenagem<ChevronUp className="ml-auto size-3.5 text-muted-foreground" /></button>
+                </PopoverTrigger>
+                <PopoverContent side="top" align="start" className="w-56 p-1">
+                  <NavLink to="/laboratorio" className="flex items-center gap-3 rounded-md px-3 py-2 text-sm hover:bg-secondary"><FlaskConical className="size-4 text-primary" />Laboratório PLN</NavLink>
+                  <NavLink to="/configuracoes" className="flex items-center gap-3 rounded-md px-3 py-2 text-sm hover:bg-secondary"><Settings className="size-4 text-primary" />Configurações</NavLink>
+                  <button onClick={() => setDark(!dark)} className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm hover:bg-secondary">{dark ? <Sun className="size-4 text-accent" /> : <Moon className="size-4 text-accent" />}{dark ? "Modo claro" : "Modo escuro"}</button>
+                </PopoverContent>
+              </Popover>
             </div>
           </aside>
           <main className="min-w-0 flex-1">
             <header className="flex items-center justify-between gap-2 border-b bg-background/80 px-4 py-2 backdrop-blur md:px-8">
               <div className="flex gap-1 md:hidden">{NAV.map((n) => <NavLink key={n.to} to={n.to} end={n.end} className={({ isActive }) => cn("rounded-md p-2", isActive && "bg-primary/15 text-primary")} title={n.label}><n.icon className="size-5" /></NavLink>)}
-                <NavLink to="/laboratorio" className="rounded-md p-2"><FlaskConical className="size-5" /></NavLink></div>
+                <NavLink to="/laboratorio" className="rounded-md p-2" title="Laboratório PLN"><FlaskConical className="size-5" /></NavLink><NavLink to="/configuracoes" className="rounded-md p-2" title="Configurações"><Cog className="size-5" /></NavLink><button onClick={() => setDark(!dark)} className="rounded-md p-2" title="Tema">{dark ? <Sun className="size-5" /> : <Moon className="size-5" />}</button></div>
               <div className="ml-auto flex items-center gap-2">
                 <button onClick={() => setSearchOpen(true)} className="hidden items-center gap-2 rounded-md border bg-card px-3 py-1 text-xs text-muted-foreground hover:bg-secondary sm:flex">Buscar <kbd className="rounded border bg-muted px-1 font-mono text-[10px]">Ctrl K</kbd></button>
                 {offline && <Badge variant="destructive">API offline</Badge>}

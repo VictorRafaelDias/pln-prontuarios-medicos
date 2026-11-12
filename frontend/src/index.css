@@ -79,5 +79,5 @@
 
 @keyframes flash { 0% { background: hsl(var(--primary) / .45); transform: scale(1.005); } 100% { background: hsl(var(--primary) / .07); transform: none; } }
 @keyframes pulse-ring { 0% { box-shadow: 0 0 0 0 hsl(var(--destructive) / .6); } 70% { box-shadow: 0 0 0 10px hsl(var(--destructive) / 0); } 100% { box-shadow: 0 0 0 0 hsl(var(--destructive) / 0); } }
-@keyframes step-in { from { opacity: 0; transform: translateY(8px) scale(.96); } to { opacity: 1; transform: none; } }
+@keyframes step-in { from { opacity: .15; transform: translateY(8px) scale(.96); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { * { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
