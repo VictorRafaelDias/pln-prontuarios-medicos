@@ -64,8 +64,17 @@ def tfidf(current_text: str | None = None, s: Session = Depends(get_session)):
 
 @router.post("/evaluate")
 def evaluate(body: dict = Body(default={}), s: Session = Depends(get_session)):
-    res = evaluation.run_evaluation(body.get("approaches"), float(body.get("min_conf", 0.0)))
+    res = evaluation.run_evaluation(body.get("approaches"), float(body.get("min_conf", 0.0)), dataset=body.get("dataset", "gold"))
     return res
+
+
+@router.get("/datasets")
+def datasets():
+    out = []
+    for k in evaluation.DATASETS:
+        g = evaluation.load_gold(k)
+        out.append({"id": k, "n": len(g["transcripts"]), "description": g.get("description", "")})
+    return out
 
 
 @router.get("/gold")

@@ -5,12 +5,14 @@ import { Play, Search } from "lucide-react";
 import { api } from "@/lib/api";
 import { age, fmtDate } from "@/lib/utils";
 import { Badge, Button, Card, CardContent, Empty, Input } from "@/components/ui";
+import { SessionViewer } from "@/components/SessionViewer";
 
 export default function Atualizar() {
   const [q, setQ] = useState("");
   const [list, setList] = useState<any[]>([]);
   const [sel, setSel] = useState<any>(null);
   const nav = useNavigate();
+  const [viewSid, setViewSid] = useState<number | null>(null);
   useEffect(() => { const t = setTimeout(() => api.get(`/patients?q=${encodeURIComponent(q)}`).then(setList), 150); return () => clearTimeout(t); }, [q]);
   const open = (id: number) => api.get(`/patients/${id}`).then(setSel);
   const start = async () => {
@@ -37,10 +39,20 @@ export default function Atualizar() {
               {sel.alerts.length > 0 && <div className="rounded-md border border-accent bg-accent/10 p-2 text-sm font-medium text-accent">Contraindicações: {sel.alerts.join(", ")}</div>}
               {last ? <div className="rounded-md bg-secondary p-3 text-sm"><div className="mb-1 font-medium">Última sessão — {fmtDate(last.saved_at)} ({last.kind === "soap" ? "SOAP" : "Anamnese"})</div>{last.summary}{last.eva != null && <Badge className="ml-2" variant="accent">EVA {last.eva}</Badge>}</div> : <p className="text-sm text-muted-foreground">Sem sessões anteriores.</p>}
               <Button size="lg" className="w-full" onClick={start}><Play /> Iniciar nova sessão SOAP</Button>
+              {sel.sessions.length > 0 && (
+                <div><h3 className="mb-2 font-serif text-base font-semibold">Histórico ({sel.sessions.length} sessões)</h3>
+                  <ul className="relative space-y-2 border-l-2 border-primary/30 pl-4">
+                    {[...sel.sessions].reverse().map((x: any) => (
+                      <li key={x.id} className="relative"><span className="absolute -left-[22px] top-2 size-3 rounded-full border-2 border-primary bg-background" />
+                        <button onClick={() => setViewSid(x.id)} className="w-full rounded-md border bg-card p-2 text-left text-sm hover:border-primary">
+                          <div className="flex items-center justify-between"><span className="font-medium">{fmtDate(x.saved_at)} <Badge variant="outline">{x.kind === "soap" ? "SOAP" : "Anamnese"}</Badge></span>{x.eva != null && <Badge variant="accent">EVA {x.eva}</Badge>}</div>
+                          <div className="line-clamp-2 text-xs text-muted-foreground">{x.summary}</div></button></li>))}
+                  </ul></div>)}
             </CardContent></Card>
           )}
         </div>
       </div>
+      <SessionViewer sid={viewSid} onClose={() => setViewSid(null)} />
     </div>
   );
 }

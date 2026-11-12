@@ -7,4 +7,5 @@ if [ ! -x ".venv/bin/python" ]; then
 fi
 [ -d node_modules ] || { npm install --no-audit --no-fund; npm --prefix frontend install --no-audit --no-fund; }
 echo "Abra http://localhost:5173  (API na porta 8010)"
+[ -n "$NO_BROWSER" ] || (command -v xdg-open >/dev/null && xdg-open http://localhost:5173 >/dev/null 2>&1 || command -v open >/dev/null && open http://localhost:5173 >/dev/null 2>&1 || true)
 npm run dev

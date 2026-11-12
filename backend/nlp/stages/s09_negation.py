@@ -179,6 +179,15 @@ class NegationStage(Stage):
                     if e["label"] in FORMER_TARGETS and sa <= e["tok_start"] < sb:
                         e["former"] = True
                         e["triggers"].append({"text": tr.text, "type": "former"})
+            for a, b, tr in by_kind.get("former_post", []):
+                if a in ent_tokens:
+                    continue
+                sa, sb = scope_start_back(a, tr.window), a
+                record("estado passado (posposto)", a, b, tr, sa, sb)
+                for e in sent_ents:
+                    if e["label"] in FORMER_TARGETS and sa <= e["tok_start"] < sb:
+                        e["former"] = True
+                        e["triggers"].append({"text": tr.text, "type": "former"})
             for a, b, tr in by_kind.get("uncertainty", []):
                 if a in ent_tokens:
                     continue
@@ -192,6 +201,13 @@ class NegationStage(Stage):
                             e["factor"] = tr.factor
                         e["uncertain"] = True
                         e["triggers"].append({"text": tr.text, "type": "uncertainty", "factor": tr.factor})
+        # "bebida eu nunca gostei": negação posposta com pronome entre a entidade e "nunca/jamais"
+        for e in ents:
+            if e["label"] in ("HABITO", "DOENCA", "MEDICAMENTO", "SINTOMA") and e["tok_end"] is not None and not e["negated"]:
+                nxt = [norm[i] for i in range(e["tok_end"], min(e["tok_end"] + 3, len(norm)))]
+                if len(nxt) >= 2 and nxt[0] in ("eu", "ele", "ela") and nxt[1] in ("nunca", "jamais"):
+                    e["negated"] = True
+                    e["triggers"].append({"text": f"{nxt[0]} {nxt[1]} (posposto)", "type": "negation"})
         for e in ents:
             e["conf"] = round(e["conf"] * e["factor"], 3)
             e["status"] = ("passado" if e["former"] else "negado" if e["negated"] else "afirmado")
@@ -207,4 +223,4 @@ class NegationStage(Stage):
                               "negated": e["negated"], "former": e["former"], "uncertain": e["uncertain"], "conf": e["conf"],
                               "triggers": e["triggers"], "sent": e["sent"]} for e in ents if e["clinical"]],
                 "config": {"triggers_loaded": {k: sum(1 for t in triggers if t.kind == k) for k in
-                                                ("pre", "post", "pseudo", "termination", "uncertainty", "former")}}}
+                                                ("pre", "post", "pseudo", "termination", "uncertainty", "former", "former_post")}}}

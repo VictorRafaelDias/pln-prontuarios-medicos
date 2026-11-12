@@ -24,7 +24,9 @@ npm run dev         # API (porta 8010) + frontend (http://localhost:5173) juntos
 ```
 
 Atalhos: `iniciar.bat` (Windows) ou `./iniciar.sh` (Linux/macOS) fazem tudo e abrem o navegador.
-Outros comandos: `npm test` (pytest) · `npm run eval` (avaliação com o gold standard).
+Outros comandos: `npm test` (pytest: 54 testes — unidade por etapa, integração da API, backup/restauração, CORS, falha do LLM) · `npm run eval` (avaliação).
+
+Para subir sem abrir o navegador: `NO_BROWSER=1` antes do script. Se a porta 8000 do seu computador estiver ocupada, nada muda: a API usa a **8010** (`API_PORT` no `.env`).
 
 O banco `backend/data/prontuario.db` é criado e populado com **5 pacientes fictícios** na primeira execução.
 
@@ -82,11 +84,19 @@ Os dicionários (`nlp/resources/dictionaries/*.json`), os gatilhos de negação,
 - **Saída estruturada em vez de tool_choice forçado:** modelos recentes rejeitam `tool_choice` forçado; o JSON Schema garante JSON válido sem isso.
 - **Respostas curtas dependem da pergunta:** “Não.” só vira dado junto da pergunta anterior do profissional (ex.: “Está grávida?”).
 
-### Avaliação
+### Avaliação (três conjuntos, com metodologia explícita)
 
-`nlp/gold/gold_standard.json` tem **10 transcrições fictícias** anotadas manualmente (7 anamneses e 3 sessões SOAP, com casos difíceis). O botão **Rodar avaliação** calcula precisão, recall e F1 por campo e geral (Regras, LLM e Híbrido), matrizes de confusão e a lista de falsos positivos/negativos com o trecho. Resultado atual das **Regras: F1 ≈ 0,92** (macro-F1 ≈ 0,90). LLM e Híbrido só são avaliados com chave configurada.
+O botão **Rodar avaliação** (Laboratório → Avaliação) calcula precisão, recall e F1 por campo e geral (Regras, LLM e Híbrido), matrizes de confusão e a lista de falsos positivos/negativos com o trecho. LLM e Híbrido só rodam com chave configurada (a tela pede confirmação mostrando o custo estimado). Existem **3 conjuntos fictícios anotados à mão**, com papéis diferentes:
 
-> Ressalva honesta: gold standard e regras foram escritos pelo mesmo autor, no mesmo conjunto de casos. O F1 é um **indicativo**, não uma medida de generalização.
+| Conjunto | Transcrições | Papel | F1 das Regras |
+|---|---|---|---|
+| `gold_standard.json` | 10 | Desenvolvimento: escrito junto com as regras | **0,933** (otimista) |
+| `holdout.json` | 5 | Validação: 1ª medição às cegas = **0,856**; depois corrigi as causas gerais dos erros (verbos no infinitivo, negação posposta, etc.), então hoje (0,996) **já não é cego** | 0,996 (otimista) |
+| `blind.json` | 5 | **Conjunto cego**: escrito depois de congelar as regras, **medido uma única vez**, sem ajuste posterior | **0,905** (P 0,896 · R 0,915) |
+
+O número a citar como estimativa de generalização é **≈ 0,90 (conjunto cego)**; a queda de 0,93 → 0,86/0,91 nos conjuntos novos mostra o quanto as regras estavam ajustadas ao gold. Mesmo o conjunto cego tem só 5 transcrições, escritas pelo mesmo autor das regras: é uma estimativa, não uma garantia.
+
+Regra para técnicas (documentada porque é uma decisão): se pontos do corpo (VB20, E36...) são citados e nenhuma técnica de agulha (sistêmica/eletroacupuntura) é explícita, assume-se acupuntura **sistêmica** (confiança 0,55, marcada como implícita); moxabustão sozinha sobre os pontos não implica agulhamento.
 
 ### Limitações
 

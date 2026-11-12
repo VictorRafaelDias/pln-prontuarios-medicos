@@ -1,0 +1,108 @@
+{
+  "version": 1,
+  "description": "Conjunto CEGO: 5 transcrições fictícias escritas e anotadas depois de congelar as regras. Medido UMA vez; as regras NÃO foram ajustadas a ele. É a estimativa mais honesta de generalização.",
+  "transcripts": [
+    {"id": "B01", "title": "Cefaleia tensional com bruxismo", "mode": "anamnese",
+     "utterances": [
+       {"speaker": "profissional", "text": "Oi Fernanda, pode me contar o que está acontecendo?"},
+       {"speaker": "paciente", "text": "Eu tenho uma dor de cabeça que começa na nuca e vai até a testa, parece uma faixa apertando. Faz uns oito meses. Eu range os dentes de noite, meu marido percebe."},
+       {"speaker": "profissional", "text": "Qual a nota hoje?"},
+       {"speaker": "paciente", "text": "Seis."},
+       {"speaker": "profissional", "text": "Quando é pior?"},
+       {"speaker": "paciente", "text": "No fim da tarde, depois de ficar o dia inteiro no computador. Melhora quando eu faço massagem no pescoço."},
+       {"speaker": "profissional", "text": "Fuma?"},
+       {"speaker": "paciente", "text": "Nunca fumei."},
+       {"speaker": "profissional", "text": "E bebida alcoólica?"},
+       {"speaker": "paciente", "text": "Duas taças de vinho no sábado."},
+       {"speaker": "profissional", "text": "Toma algum remédio?"},
+       {"speaker": "paciente", "text": "Só paracetamol quando a dor aperta."},
+       {"speaker": "profissional", "text": "Língua vermelha nas pontas, pulso em corda. Ascensão do yang do fígado. Vou usar VB20, VB14, TA5 e F3, vinte minutos."}
+     ],
+     "gold": {
+       "queixa.descricao": "Dor de cabeça", "queixa.localizacao": ["cabeca", "cervical"], "queixa.tipo_dor": ["aperto"], "queixa.inicio": "Há 8 meses",
+       "queixa.eva": 6, "queixa.horario_pior": "tarde", "queixa.melhora": ["Massagem no pescoço"], "habitos.tabagismo": "nunca",
+       "habitos.etilismo": "social", "saude.medicamentos": ["Paracetamol"], "mtc.lingua": "Vermelha nas pontas", "mtc.pulso": "Em corda",
+       "mtc.padroes": ["Ascensão do yang do fígado"], "soap.p_pontos": ["VB20", "VB14", "TA5", "F3"], "soap.p_tempo": 20,
+       "plano.tecnicas": ["sistemica"], "soap.p_tecnica": ["sistemica"]
+     }},
+    {"id": "B02", "title": "Lombociatalgia — marcapasso e AAS", "mode": "anamnese",
+     "utterances": [
+       {"speaker": "profissional", "text": "Seu Antônio, o que o senhor sente?"},
+       {"speaker": "paciente", "text": "Uma dor na lombar que desce pela perna direita até o pé, dormência também. Já faz uns três anos."},
+       {"speaker": "profissional", "text": "De zero a dez?"},
+       {"speaker": "paciente", "text": "Oito, às vezes nove."},
+       {"speaker": "profissional", "text": "O senhor tem marcapasso?"},
+       {"speaker": "paciente", "text": "Tenho, coloquei em 2020."},
+       {"speaker": "profissional", "text": "Toma aspirina ou outro anticoagulante?"},
+       {"speaker": "paciente", "text": "Tomo AAS todo dia."},
+       {"speaker": "profissional", "text": "Outras doenças?"},
+       {"speaker": "paciente", "text": "Hipertensão e diabetes. Tomo atenolol e insulina."},
+       {"speaker": "profissional", "text": "Cirurgias?"},
+       {"speaker": "paciente", "text": "Operei a coluna em 2019."},
+       {"speaker": "profissional", "text": "Evite eletroacupuntura por causa do marcapasso. Vou usar B23, B25, B40 e VB30 com moxa."}
+     ],
+     "gold": {
+       "queixa.descricao": "Dor lombar", "queixa.localizacao": ["lombar", "perna_d", "pe_d"], "queixa.tipo_dor": ["irradiada", "dormência"],
+       "queixa.inicio": "Há 3 anos", "queixa.eva": 8, "contra.marcapasso": true, "contra.anticoagulantes": true, "contra.diabetes": true,
+       "saude.doencas": ["Hipertensão", "Diabetes"], "saude.medicamentos": ["AAS", "Atenolol", "Insulina"], "saude.cirurgias": ["Cirurgia de coluna (2019)"],
+       "soap.p_pontos": ["B23", "B25", "B40", "VB30"], "plano.tecnicas": ["moxabustao"], "soap.p_tecnica": ["moxabustao"]
+     }},
+    {"id": "B03", "title": "SOAP — melhora parcial com ventosas", "mode": "soap", "previous": {"eva": 7},
+     "utterances": [
+       {"speaker": "paciente", "text": "Estou bem melhor, doutora. A dor no ombro esquerdo caiu para nota dois e já consigo dormir de lado."},
+       {"speaker": "profissional", "text": "Ótimo. Língua rosada, pulso fino. Vou fazer ventosas no trapézio e usar IG15, TA14 e VB21, quinze minutos."},
+       {"speaker": "profissional", "text": "Nenhuma reação na sessão passada, certo? Continue com os alongamentos e evite dormir sem travesseiro. Nos vemos na semana que vem."}
+     ],
+     "gold": {
+       "soap.s_relato": "Estou bem melhor. A dor no ombro esquerdo caiu para nota 2 e já consigo dormir de lado", "soap.s_eva": 2,
+       "soap.a_evolucao": "Melhora relatada pelo paciente", "soap.o_lingua": "Rosada", "soap.o_pulso": "Fino", "soap.p_pontos": ["IG15", "TA14", "VB21"],
+       "soap.p_tecnica": ["ventosa", "sistemica"], "soap.p_tempo": 15, "soap.p_orientacoes": "Continue com os alongamentos e evite dormir sem travesseiro",
+       "soap.p_proxima": "Nos vemos na semana que vem"
+     }},
+    {"id": "B04", "title": "Dismenorreia — pilates e alergia", "mode": "anamnese",
+     "utterances": [
+       {"speaker": "profissional", "text": "Oi Larissa, qual é o motivo da consulta?"},
+       {"speaker": "paciente", "text": "Cólica menstrual muito forte, nota nove nos dois primeiros dias, e TPM com muita irritação."},
+       {"speaker": "profissional", "text": "Há quanto tempo?"},
+       {"speaker": "paciente", "text": "Desde os quinze anos."},
+       {"speaker": "profissional", "text": "Usa anticoncepcional?"},
+       {"speaker": "paciente", "text": "Uso, tomo yasmin todo dia."},
+       {"speaker": "profissional", "text": "Alergias?"},
+       {"speaker": "paciente", "text": "Sou alérgica a dipirona."},
+       {"speaker": "profissional", "text": "Faz exercício?"},
+       {"speaker": "paciente", "text": "Pilates duas vezes por semana."},
+       {"speaker": "profissional", "text": "Tem medo de agulha?"},
+       {"speaker": "paciente", "text": "Não, tranquilo."},
+       {"speaker": "profissional", "text": "Vamos de acupuntura sistêmica e moxabustão no abdômen, semanalmente, umas seis sessões."}
+     ],
+     "gold": {
+       "queixa.descricao": "Cólica menstrual", "queixa.eva": 9, "secundarias.lista": ["TPM", "Irritabilidade"], "queixa.inicio": "Desde os 15 anos",
+       "saude.medicamentos": ["Yasmin (anticoncepcional)"], "saude.alergias": ["Dipirona"], "habitos.atividade_fisica": "Pilates 2x por semana",
+       "contra.medo_agulha": false, "plano.tecnicas": ["sistemica", "moxabustao"], "plano.frequencia": "Semanalmente", "plano.sessoes": 6,
+       "saude.ciclo": "Cólica menstrual muito forte e TPM"
+     }},
+    {"id": "B05", "title": "Ombro congelado — ex-fumante e ex-etilista", "mode": "anamnese",
+     "utterances": [
+       {"speaker": "profissional", "text": "Seu Hélio, como o senhor está?"},
+       {"speaker": "paciente", "text": "Meu ombro esquerdo travou, não consigo levantar o braço, e o pescoço dói junto. Começou há cinco meses."},
+       {"speaker": "profissional", "text": "Qual a intensidade?"},
+       {"speaker": "paciente", "text": "Nota sete. Piora de noite."},
+       {"speaker": "profissional", "text": "O senhor fumava?"},
+       {"speaker": "paciente", "text": "Parei de fumar há cinco anos. Fumava vinte cigarros por dia durante trinta anos."},
+       {"speaker": "profissional", "text": "E bebida?"},
+       {"speaker": "paciente", "text": "Também parei, faz dois anos."},
+       {"speaker": "profissional", "text": "Como é o sono?"},
+       {"speaker": "paciente", "text": "Durmo umas cinco horas, acordo cansado."},
+       {"speaker": "profissional", "text": "De zero a dez, o estresse?"},
+       {"speaker": "paciente", "text": "Oito."},
+       {"speaker": "profissional", "text": "Língua pálida com saburra branca grossa, pulso profundo e lento. Deficiência de yang do rim. Vou tonificar o yang do rim. Moxa e B23, R3, VG4 e VC4, trinta minutos."}
+     ],
+     "gold": {
+       "queixa.descricao": "Dor no ombro esquerdo", "queixa.localizacao": ["ombro_e", "cervical"], "queixa.inicio": "Há 5 meses", "queixa.eva": 7,
+       "queixa.horario_pior": "noite", "habitos.tabagismo": "ex", "habitos.cigarros_dia": 20, "habitos.anos_fumo": 30, "habitos.etilismo": "ex",
+       "habitos.sono": "Dorme umas 5 horas, acorda cansado", "habitos.estresse": 8, "mtc.lingua": "Pálida com saburra branca grossa",
+       "mtc.pulso": "Profundo e lento", "mtc.padroes": ["Deficiência de yang do rim"], "mtc.principio": "Tonificar o yang do rim",
+       "soap.p_pontos": ["B23", "R3", "VG4", "VC4"], "plano.tecnicas": ["moxabustao"], "soap.p_tecnica": ["moxabustao"], "soap.p_tempo": 30
+     }}
+  ]
+}

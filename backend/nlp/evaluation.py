@@ -15,12 +15,16 @@ LIST_TYPES = {"list", "multiselect", "bodymap", "points"}
 _STOP = {"de", "do", "da", "dos", "das", "o", "a", "os", "as", "um", "uma", "e", "em", "no", "na", "nos", "nas", "com", "para", "por", "que", "ao", "eu"}
 
 
-def load_gold() -> dict:
-    return json.loads((GOLD_DIR / "gold_standard.json").read_text(encoding="utf-8"))
+DATASETS = {"gold": "gold_standard.json", "holdout": "holdout.json", "blind": "blind.json"}
+
+
+def load_gold(dataset: str = "gold") -> dict:
+    return json.loads((GOLD_DIR / DATASETS[dataset]).read_text(encoding="utf-8"))
 
 
 def _toks(s) -> set[str]:
-    return {w for w in re.findall(r"\w+", fold(str(s))) if w not in _STOP and len(w) > 1}
+    """Tokens comparáveis: sem acento, sem stopwords e com plural simples removido (litros → litro)."""
+    return {(w[:-1] if len(w) > 3 and w.endswith("s") else w) for w in re.findall(r"\w+", fold(str(s))) if w not in _STOP and len(w) > 1}
 
 
 def item_match(ftype: str, a, b) -> bool:
@@ -100,9 +104,9 @@ def confusion(fid: str, gold_items: list[tuple]) -> dict:
     return {"field": fid, "labels": labels, "matrix": m.tolist()}
 
 
-def run_evaluation(approaches: list[str] | None = None, min_conf: float = 0.0, use_llm_cache: bool = True) -> dict:
+def run_evaluation(approaches: list[str] | None = None, min_conf: float = 0.0, use_llm_cache: bool = True, dataset: str = "gold") -> dict:
     approaches = approaches or ["rules", "llm", "hybrid"]
-    gold = load_gold()
+    gold = load_gold(dataset)
     llm_ok = llm_mod.available()
     totals: dict[str, dict[str, list[int]]] = {a: defaultdict(lambda: [0, 0, 0]) for a in approaches}
     errors: dict[str, list[dict]] = {a: [] for a in approaches}
@@ -152,7 +156,7 @@ def run_evaluation(approaches: list[str] | None = None, min_conf: float = 0.0, u
             for fid in ("habitos.tabagismo", "habitos.etilismo", "queixa.horario_pior"):
                 if fid in tr["gold"] or fid in pf:
                     cat_pairs[f"{a}|{fid}"].append((tr["gold"].get(fid, "∅"), pf.get(fid, {}).get("value", "∅")))
-    out: dict = {"approaches": {}, "llm_available": llm_ok, "n_transcripts": len(gold["transcripts"]), "min_conf": min_conf,
+    out: dict = {"dataset": dataset, "description": gold.get("description", ""), "approaches": {}, "llm_available": llm_ok, "n_transcripts": len(gold["transcripts"]), "min_conf": min_conf,
                  "timing": {"rules_ms_total": round(rules_ms, 1), "llm_ms_total": round(llm_ms, 1)}, "llm_cost_usd": round(llm_cost, 5),
                  "per_transcript": per_tr}
     for a in approaches:

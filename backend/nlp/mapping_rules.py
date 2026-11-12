@@ -17,7 +17,7 @@ from .form_schema import FIELD_BY_ID, REGIONS, fold
 HABIT_THEMES = {"sono", "intestino", "urina", "estresse"}
 PAIN_THEMES = {"dor", "musculo"}
 SECOND_CUE = re.compile(r"\b(tamb[eé]m|al[eé]m disso|outra queixa|outra coisa|outro problema|secund[aá]ri|e mais)\b", re.I)
-POS_START = re.compile(r"^\W*(sim|claro|tenho|tomo|uso|fa[cç]o|fumo|bebo|isso|exato|exatamente|com certeza|correto|positivo)\b", re.I)
+POS_START = re.compile(r"^\W*(sim|claro|tenho|tomo|uso|fa[cç]o|fumo|bebo|estou|sou|morro de medo|muito|bastante|demais|isso|exato|exatamente|com certeza|correto|positivo)\b", re.I)
 NEG_START = re.compile(r"^\W*(n[aã]o|nunca|jamais|nenhum|nenhuma|negativo)\b", re.I)
 PARTIAL_START = re.compile(r"^\W*(?:[àa]s vezes|um pouco|mais ou menos|socialmente|de vez em quando|raramente|eventualmente|ocasionalmente)\b", re.I)
 SCALE_Q = re.compile(r"\b(nota|de 0 a 10|0 a 10|escala|intensidade|eva|quanto d[oó]i|quanto est[aá])\b", re.I)
@@ -30,10 +30,11 @@ CAP_ART = {"cabeça": "na", "pescoço": "no", "garganta": "na", "ombro": "no", "
            "mão": "na", "tórax": "no", "costas": "nas", "lombar": "na região", "abdômen": "no", "quadril": "no", "glúteo": "no",
            "coxa": "na", "joelho": "no", "perna": "na", "pé": "no"}
 FEM = {"cabeça", "mão", "coxa", "perna", "garganta"}
+PLURAL = {"mão": "mãos", "quadril": "quadris", "pé": "pés", "braço": "braços", "ombro": "ombros", "joelho": "joelhos", "cotovelo": "cotovelos"}
 SYMPTOM_NAME = {"lombalgia": "Dor lombar", "cervicalgia": "Dor cervical", "ciatalgia": "Dor ciática (ciatalgia)",
                 "dor de cabeça": "Dor de cabeça", "enxaqueca": "Enxaqueca"}
 
-IMPROVE_RX = re.compile(r"\b(melhor(?:a|ou|ei|ando|ia|as)|alivi(?:ou|ei|ando)|diminu(?:iu|i)|menos dor|passou|sumiu|amenizou|"
+IMPROVE_RX = re.compile(r"\b(melhor(?:a|ou|ei|ando|ia|as|es)|alivi(?:ou|ei|ando)|diminu(?:iu|i)|menos dor|passou|sumiu|amenizou|"
                         r"evoluiu bem|bem melhor|me sinto melhor|estou melhor)\b", re.I)
 WORSEN_RX = re.compile(r"\b(pior(?:ou|ei|ando|a)?|aumentou|mais dor|voltou|intensificou|agravou)\b", re.I)
 STABLE_RX = re.compile(r"\b(igual|na mesma|sem mudan[cç]a|continua igual|est[aá]vel|n[aã]o mudou)\b", re.I)
@@ -110,6 +111,11 @@ class Mapper:
             self.qa[i] = {"q_sents": q_sents, "q_text": " ".join(self.sents[k]["text"] for k in q_sents),
                           "q_ents": [e for k in q_sents for e in self.by_sent.get(k, [])]}
 
+    def qa_for(self, si: int):
+        """Contexto pergunta→resposta da FALA inteira (a resposta pode ter várias sentenças)."""
+        first = next((x["idx"] for x in self.sents if x["utt"] == self.sents[si]["utt"]), si)
+        return self.qa.get(first)
+
     def answer_polarity(self, si: int) -> str | None:
         """'neg' | 'pos' | 'partial' para respostas curtas; None se a fala não parece uma resposta curta."""
         s = self.sents[si]
@@ -147,6 +153,14 @@ class Mapper:
                 return "e"
         return None
 
+    ACTION_BEFORE = re.compile(r"(?:\bquando|\bao|\bpara|\bpra|\bse)\s+(?:eu\s+)?\w+\s+(?:o|a|os|as|meu|minha)?\s*$", re.I)
+
+    def is_action_object(self, e: dict) -> bool:
+        """'quando levanto o braço': o braço é o objeto de um movimento, não o local da dor."""
+        s = self.sents[e["sent"]]
+        before = self.text[s["start"]:e["start"]]
+        return bool(self.ACTION_BEFORE.search(before)) and not re.search(r"d[oó]i|dor", before[-25:], re.I)
+
     def regions(self, e: dict) -> tuple[list[str], float, str]:
         """Ids de região do corpo para uma entidade (PARTE_CORPO ou SINTOMA com região). Retorna (ids, fator de confiança, descrição)."""
         attrs = e.get("attrs", {})
@@ -171,6 +185,8 @@ class Mapper:
             fem = e["canonical"] in FEM
             side = {"d": "direita" if fem else "direito", "e": "esquerda" if fem else "esquerdo", "both": "bilateral"}.get(lat or "", "")
             desc = f"{e['canonical']} {side}".strip()
+            if lat == "both":
+                desc = PLURAL.get(e["canonical"], e["canonical"] + "s")
         else:
             ids = [b for b in base if b in REGIONS]
         if attrs.get("generic"):
@@ -182,6 +198,8 @@ class Mapper:
         out = []
         for canon, desc in parts:
             art = CAP_ART.get(canon, "em")
+            if desc == PLURAL.get(canon, canon + "s"):
+                art = {"no": "nos", "na": "nas"}.get(art, art)
             out.append(f"{art} {desc}" if canon != "lombar" else "na região lombar")
         if not out:
             return ""
@@ -235,7 +253,7 @@ class Mapper:
         # resposta numérica solta a uma pergunta de escala: "Sete."
         for si, qa in self.qa.items():
             s = self.sents[si]
-            m = re.fullmatch(r"\W*(?P<h>mais ou menos|uns|umas|cerca de|aproximadamente|acho que)?\s*(?:nota\s+)?(?P<v>\d{1,2})(?:\s+de\s+10)?\W*", s["text"], re.I)
+            m = re.fullmatch(r"\W*(?P<h>mais ou menos|uns|umas|cerca de|aproximadamente|acho que)?\s*(?:nota\s+)?(?P<v>\d{1,2})(?:\s+de\s+10)?(?:\s*,?\s*(?:talvez|ou)\s+\d{1,2})?\W*", s["text"], re.I)
             if m and SCALE_Q.search(qa["q_text"]) and 0 <= int(m.group("v")) <= 10:
                 stress = bool(re.search(r"estress|ansiedad", qa["q_text"], re.I)) and not PAIN_Q.search(qa["q_text"])
                 self.add("habitos.estresse" if stress else eva_field, int(m.group("v")), 0.7 if m.group("h") else 0.85, si,
@@ -302,6 +320,8 @@ class Mapper:
                             if r not in loc_ids or loc_ids[r][0] < 0.85 * f:
                                 loc_ids[r] = (0.9 * f * e["conf"] / 0.9, si, [e])
                 elif e["label"] == "PARTE_CORPO" and pain:
+                    if self.is_action_object(e):
+                        continue
                     if is_secondary:
                         _, _, d = self.regions(e)
                         secondary.append((f"Dor {self.part_phrase([(e['canonical'], d)])}", 0.7, si, e))
@@ -367,7 +387,10 @@ class Mapper:
                 has_other = any(x["label"] in ("HABITO", "MEDICAMENTO", "CIRURGIA", "DOENCA", "CONDICAO") for x in ents)
                 asked = bool(qa and TIME_Q.search(qa["q_text"]))
                 began = bool(re.search(r"\b(come[cç]ou|iniciou|surgiu|apareceu|aparece|come[cç]o|tem|sinto)\b", s["text"], re.I))
-                if (has_symptom and not (has_other and not asked)) or asked or (main_si == s["idx"] and began):
+                prev_same_utt = s["idx"] > 0 and self.sents[s["idx"] - 1]["utt"] == s["utt"] and (s["idx"] - 1) == main_si
+                other_topic = any(x["label"] in ("HABITO", "SINTOMA", "MEDICAMENTO", "DOENCA", "CIRURGIA", "CONDICAO") for x in ents)
+                time_only = prev_same_utt and a.get("kind") in ("ago", "since", "duration") and not other_topic
+                if (has_symptom and not (has_other and not asked)) or asked or time_only or ((main_si == s["idx"] or prev_same_utt) and began):
                     if a.get("kind") == "bare" and not (asked or has_symptom):
                         continue
                     text = self.time_text(e)
@@ -410,24 +433,51 @@ class Mapper:
                         self.add("queixa.horario_pior", e["attrs"]["opcao"], 0.85 * e["conf"] / 0.9, s["idx"], e["rule"] + " + gatilho de piora", [e])
 
     # ------------------------------------------------------------------ piora / melhora
-    def _split_items(self, phrase: str) -> list[str]:
-        parts = re.split(r"\s*(?:,|\be\b|\bou\b)\s*", phrase)
-        out = []
+    def _infinitive(self, span) -> str | None:
+        """Verbo no infinitivo a partir do lema do spaCy, validado contra o vocabulário (evita 'carregir')."""
+        tok = span[0]
+        word = tok.text.lower()
+        stem = word[:-1] if word.endswith("o") else word
+        for cand in (tok.lemma_.lower(), stem + "ar", stem + "er", stem + "ir"):
+            if cand != word and cand.endswith(("ar", "er", "ir")) and tok.vocab.has_vector(cand):
+                return cand
+        return None
+
+    def _split_items(self, phrase: str, base: int) -> list[str]:
+        """Divide 'carrego peso e à noite, quando deito em cima dele' em itens e põe o verbo no infinitivo."""
+        out: list[str] = []
         horarios = {fold(w) for w in ("manhã", "tarde", "noite", "madrugada", "à noite", "de manhã", "à tarde", "de noite", "de madrugada")}
-        for p in parts:
-            p = re.sub(r"^(?:com|o|a|os|as|um|uma|eu|me|se|de|do|da|no|na|ao|à)\s+", "", p.strip(), flags=re.I).strip(" .")
-            if fold(p) in horarios:
+        pos = 0
+        for part in re.split(r"(\s+e\s+|\s+ou\s+|\s*,\s*)", phrase):
+            raw, off = part, base + pos
+            pos += len(part)
+            if re.fullmatch(r"\s+e\s+|\s+ou\s+|\s*,\s*", part):
                 continue
-            if 2 < len(p) <= 40:
-                out.append(cap(p))
+            lead = re.match(r"^(?:\s*(?:quando|com|o|a|os|as|um|uma|eu|me|se|de|do|da|no|na|ao|à)\s+)+", raw, re.I)
+            if lead:
+                raw, off = raw[lead.end():], off + lead.end()
+            raw = raw.strip(" .")
+            if not raw or fold(raw) in horarios or not (2 < len(raw) <= 45):
+                continue
+            w = re.match(r"\w+", raw)
+            if w:
+                span = self.doc.char_span(off, off + w.end(), alignment_mode="contract")
+                if span is not None and len(span) == 1 and span[0].pos_ in ("VERB", "AUX"):
+                    inf = self._infinitive(span)
+                    if inf:
+                        raw = inf + raw[w.end():]
+            out.append(cap(raw))
         return out
 
     def r_piora_melhora(self):
-        piora = re.compile(r"\b(?:piora|pioram|piorando|piorou|agrava|agravam|aumenta|fico pior|fica pior|ficar pior)\b\s+(?:muito\s+|bastante\s+|bem\s+)?(?:com|quando|ao|aos|se|depois\s+d[oae]s?|ap[oó]s|em|no|na|[àa]s?|durante|de)\s+(?P<x>[^.;?!]{3,60}?)(?=\s+(?:e\s+(?:melhora|alivia|passa)|mas|por[eé]m)\b|[.;?!,]|$)", re.I)
-        melhora = re.compile(r"\b(?:melhora|melhoram|alivia|aliviam|diminui|passa|fico melhor|fica melhor|ameniza)\b\s+(?:muito\s+|bastante\s+|bem\s+)?(?:com|quando|ao|aos|se|depois\s+d[oae]s?|ap[oó]s|em|no|na|[àa]s?|durante)\s+(?P<x>[^.;?!]{3,60}?)(?=\s+(?:e\s+(?:piora|agrava)|mas|por[eé]m)\b|[.;?!,]|$)", re.I)
+        end = r"(?=\s+(?:e\s+(?:{other})|mas|por[eé]m)\b|[.;?!]|,(?!\s*(?:quando|ao|com|se|depois)\b)|$)"
+        prep = r"(?:com|quando|ao|aos|se|depois\s+d[oae]s?|ap[oó]s|em|no|na|[àa]s?|durante|de)"
+        piora = re.compile(r"\b(?:piora|pioram|piorando|piorou|agrava|agravam|aumenta|fico pior|fica pior|ficar pior)\b\s+(?:muito\s+|bastante\s+|bem\s+)?" + prep +
+                           r"\s+(?P<x>[^.;?!]{3,90}?)" + end.replace("{other}", "melhora|alivia|passa"), re.I)
+        melhora = re.compile(r"\b(?:melhora|melhoram|alivia|aliviam|diminui|passa|fico melhor|fica melhor|ameniza)\b\s+(?:muito\s+|bastante\s+|bem\s+)?" + prep +
+                             r"\s+(?P<x>[^.;?!]{3,90}?)" + end.replace("{other}", "piora|agrava"), re.I)
         for s in self.patient_sents():
             t = s["text"]
-            hor = [e for e in self.by_sent.get(s["idx"], []) if e["label"] == "HORARIO"]
             for rx, field in ((piora, "queixa.piora"), (melhora, "queixa.melhora")):
                 for m in rx.finditer(t):
                     pre = t[max(0, m.start() - 12):m.start()].lower()
@@ -436,12 +486,9 @@ class Mapper:
                     x = m.group("x")
                     if re.fullmatch(r"nada|ningu[eé]m|nenhum\w*", x.strip(), re.I):
                         continue
-                    xs, xe = s["start"] + m.start("x"), s["start"] + m.end("x")
-                    if any(h["start"] <= xs + 1 and h["end"] >= xe - 1 or (h["start"] >= xs and h["end"] <= xe and (h["end"] - h["start"]) >= 0.7 * (xe - xs)) for h in hor):
-                        continue  # é um horário ("piora à noite"), não um fator
-                    items = self._split_items(x)
+                    items = self._split_items(x, s["start"] + m.start("x"))
                     if items:
-                        self.add(field, items, 0.75, s["idx"], f"regex {field.split('.')[1]}: verbo + 'com/quando/ao' + fator")
+                        self.add(field, items, 0.75, s["idx"], f"regex {field.split('.')[1]}: verbo + 'com/quando/ao' + fator (verbo → infinitivo)")
 
     # ------------------------------------------------------------------ hábitos
     def _habit_state(self, e: dict, s: dict) -> str:
@@ -522,12 +569,15 @@ class Mapper:
                 if e["label"] != "HABITO" or e["attrs"].get("tema") not in ("etilismo", "bebida"):
                     continue
                 if e["attrs"]["tema"] == "bebida" and (has_agua or not re.search(r"\b(?:socialmente|[àa]lcool|alcoólic|final de semana|festa|cerveja|vinho)\b", s["text"], re.I)):
-                    if has_agua or not self.qa.get(s["idx"]):
+                    if has_agua or not self.qa_for(s["idx"]):
                         continue
                 if e["former"] or (e.get("tense") == "past" and e["attrs"]["tema"] == "etilismo" and not e["negated"] and False):
                     val, conf = "ex", 0.85
                 elif e["negated"]:
-                    val, conf = "nunca", 0.8 if re.search(r"\bnunca\b", s["text"], re.I) else 0.7
+                    if re.search(r"\bdesde\b", s["text"], re.I):
+                        val, conf = "ex", 0.7  # "não bebo desde que descobri a gravidez" → parou
+                    else:
+                        val, conf = "nunca", 0.8 if re.search(r"\bnunca\b", s["text"], re.I) else 0.7
                 else:
                     freq = [x for x in ents if x["label"] == "FREQUENCIA"]
                     if SOCIAL_RX.search(s["text"]):
@@ -559,7 +609,8 @@ class Mapper:
             ents = self.by_sent.get(s["idx"], [])
             temas = {e["attrs"].get("tema"): e for e in ents if e["label"] in ("HABITO", "SINTOMA") and e["attrs"].get("tema")}
             for e in ents:
-                if e["label"] == "FREQUENCIA" and e["attrs"].get("unit") in ("litros", "copos") and (e["attrs"].get("obj", "") in ("água", "agua") or "agua" in temas):
+                qa_agua = bool(self.qa.get(s["idx"]) and re.search(r"[áa]gua|hidrat", self.qa[s["idx"]]["q_text"], re.I))
+                if e["label"] == "FREQUENCIA" and e["attrs"].get("unit") in ("litros", "copos") and (e["attrs"].get("obj", "") in ("água", "agua") or "agua" in temas or qa_agua):
                     a = e["attrs"]
                     txt = f"{num_text(a['qty'])} {a['unit'][:-1] if a['qty'] == 1 else a['unit']} de água" + (" por dia" if a.get("per") in ("dia", "") else f" por {a['per']}")
                     self.add("habitos.agua", txt, 0.9, s["idx"], e["rule"] + " (água)", [e])
@@ -575,7 +626,8 @@ class Mapper:
                     if len(re.findall(r"\w+", s["text"])) >= 3 and not (e["negated"] and tema == "alimentacao" and False):
                         if any(c["field"] == field and c["sent"] == s["idx"] for c in self.cands):
                             continue
-                        self.add(field, s["text"].rstrip("."), 0.7 * e["factor"], s["idx"], f"extração da sentença (tema {tema})", [e])
+                        pen = 0.7 if any(x["label"] == "MEDICAMENTO" for x in ents) else 1.0  # o sintoma é só o motivo do remédio
+                        self.add(field, s["text"].rstrip("."), 0.7 * e["factor"] * pen, s["idx"], f"extração da sentença (tema {tema})", [e])
         # ---- ciclo menstrual
         for s in psents:
             if re.search(r"\b(menstrua\w*|ciclo (?:menstrual|regular|irregular)|menopausa|tpm|menstrual|fluxo)\b", s["text"], re.I):
@@ -634,7 +686,9 @@ class Mapper:
                         continue
                     if not affirmed(e) or fam is not None:
                         continue
-                    dose = next((d for d in ents if d["label"] == "DOSE" and 0 <= d["start"] - e["end"] < 25), None)
+                    meds = [m for m in ents if m["label"] == "MEDICAMENTO"]
+                    dose = next((d for d in ents if d["label"] == "DOSE" and 0 <= d["start"] - e["end"] < 25
+                                 and not any(m is not e and e["end"] <= m["start"] < d["start"] for m in meds)), None)
                     name = cap(e["text"] if e["text"].isupper() else e["canonical"])
                     if dose:
                         name += f" {num_text(dose['attrs']['qty'])} {dose['attrs']['unit']}"
@@ -656,7 +710,7 @@ class Mapper:
                     self.add("saude.cirurgias", [name], 0.8 * e["factor"], si, e["rule"], [e])
                 elif e["label"] == "ALERGENO":
                     if allergy and not neg_allergy and affirmed(e):
-                        self.add("saude.alergias", [cap(e["canonical"])], 0.85 * e["factor"], si, "ALERGENO em frase de alergia", [e])
+                        self.add("saude.alergias", [cap(e["text"].lower())], 0.85 * e["factor"], si, "ALERGENO em frase de alergia", [e])
             if allergy and not neg_allergy:
                 for m in re.finditer(r"\bal[eé]rgic[oa]s?\s+(?:a|ao|à|aos|às)\s+(?P<x>[^.;,]{3,40}?)(?=[.;,]|\s+e\s+|$)", s["text"], re.I):
                     x = m.group("x").strip()
@@ -760,11 +814,15 @@ class Mapper:
                     self.add("soap.p_reacoes", "Sem reações adversas", 0.8, si, "regex ausência de reações")
                 elif "?" not in t:
                     self.add("soap.p_reacoes", t.rstrip("."), 0.7, si, "regex reação adversa")
-        # técnica implícita: pontos citados sem técnica explícita → sistêmica
-        if pontos_seen and not tecnica_seen:
-            si = next(c["sent"] for c in self.cands if c["field"] == "soap.p_pontos")
-            self.add("plano.tecnicas", ["sistemica"], 0.5, si, "pontos citados sem técnica explícita → acupuntura sistêmica (implícita)")
-            self.add("soap.p_tecnica", ["sistemica"], 0.5, si, "pontos citados sem técnica explícita → acupuntura sistêmica (implícita)")
+        # técnica implícita: pontos do corpo citados e nenhuma técnica de agulha explícita (sistêmica/eletro).
+        # Moxa sozinha sobre os pontos não implica agulhamento.
+        if pontos_seen:
+            tecs = {c["value"][0] for c in self.cands if c["field"] == "plano.tecnicas"}
+            if not (tecs & {"sistemica", "eletroacupuntura"}) and tecs != {"moxabustao"}:
+                si = next(c["sent"] for c in self.cands if c["field"] == "soap.p_pontos")
+                msg = "pontos do corpo citados sem técnica de agulha explícita → acupuntura sistêmica (implícita)"
+                self.add("plano.tecnicas", ["sistemica"], 0.55, si, msg)
+                self.add("soap.p_tecnica", ["sistemica"], 0.55, si, msg)
         # evolução (SOAP)
         if self.mode == "soap":
             for s in self.patient_sents():

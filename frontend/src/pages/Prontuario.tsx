@@ -7,6 +7,7 @@ import { api } from "@/lib/api";
 import { age, fmtDate, isEmpty } from "@/lib/utils";
 import { useApp } from "@/App";
 import { FormView } from "@/components/FormView";
+import { SessionViewer } from "@/components/SessionViewer";
 import { Badge, Button, Card, CardContent, CardHeader, CardTitle, Empty, Skeleton, Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui";
 
 export default function Prontuario() {
@@ -16,6 +17,7 @@ export default function Prontuario() {
   const [p, setP] = useState<any>(null);
   const [audit, setAudit] = useState<any[]>([]);
   const [edit, setEdit] = useState(false);
+  const [viewSid, setViewSid] = useState<number | null>(null);
   const [form, setForm] = useState<any>({});
   const load = () => api.get(`/patients/${id}`).then((x) => { setP(x); setForm(x.anamnese ?? {}); }).catch((e) => toast.error(e.message));
   useEffect(() => { load(); api.get(`/patients/${id}/audit`).then(setAudit); }, [id]);
@@ -58,7 +60,7 @@ export default function Prontuario() {
                   <CardContent className="space-y-1 text-sm">
                     <p>{s.summary}</p>
                     {s.form["soap.p_pontos"]?.value && <div className="flex flex-wrap gap-1">{s.form["soap.p_pontos"].value.map((c: string) => <Badge key={c} variant="solid" className="font-mono">{c}</Badge>)}</div>}
-                    <div className="flex gap-2 pt-2"><Button size="sm" variant="outline" onClick={() => window.open(`/api/sessions/${s.id}/pdf`, "_blank")}><FileDown /> PDF</Button><Button size="sm" variant="ghost" onClick={() => nav(`/laboratorio?session=${s.id}`)}><FlaskConical /> Laboratório</Button></div>
+                    <div className="flex gap-2 pt-2"><Button size="sm" onClick={() => setViewSid(s.id)}>Ver sessão</Button><Button size="sm" variant="outline" onClick={() => window.open(`/api/sessions/${s.id}/pdf`, "_blank")}><FileDown /> PDF</Button><Button size="sm" variant="ghost" onClick={() => nav(`/laboratorio?session=${s.id}`)}><FlaskConical /> Laboratório</Button></div>
                   </CardContent></Card></div>))}
           </div>
         </TabsContent>
@@ -85,6 +87,7 @@ export default function Prontuario() {
           <Card><CardContent className="space-y-1 p-4 text-sm">{audit.length === 0 ? <p className="text-muted-foreground">Sem alterações.</p> : audit.map((a) => <div key={a.id} className="flex gap-3 border-b py-1.5 last:border-0"><span className="w-36 shrink-0 font-mono text-xs text-muted-foreground">{fmtDate(a.at, true)}</span><span className="font-medium">{a.action}</span><span className="text-muted-foreground">{a.field} {a.old != null && `${JSON.stringify(a.old)} →`} {a.new != null && JSON.stringify(a.new)}</span></div>)}</CardContent></Card>
         </TabsContent>
       </Tabs>
+      <SessionViewer sid={viewSid} onClose={() => setViewSid(null)} />
     </div>
   );
 }

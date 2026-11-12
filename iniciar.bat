@@ -11,5 +11,5 @@ if not exist "node_modules" (
 )
 echo.
 echo Abrindo http://localhost:5173  (API na porta 8010)
-start "" http://localhost:5173
+if not defined NO_BROWSER start "" http://localhost:5173
 call npm run dev

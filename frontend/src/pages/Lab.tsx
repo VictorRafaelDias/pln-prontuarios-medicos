@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip as RTip, XAxis, YAxis } from "recharts";
-import { ChevronLeft, ChevronRight, Download, FlaskConical, Play, Sparkles } from "lucide-react";
+import { ChevronLeft, ChevronRight, Download, FlaskConical, Pause, Play, PlayCircle, Sparkles } from "lucide-react";
 import { api, sourceLabel } from "@/lib/api";
 import { cn, download } from "@/lib/utils";
 import { useApp } from "@/App";
@@ -62,48 +62,60 @@ export default function Lab() {
         </div>
       </CardContent></Card>
 
-      {!a ? (busy ? <Skeleton className="h-96" /> : <Empty title="Escolha uma fonte de texto e clique em Analisar" icon={<FlaskConical className="size-8" />} />) : (
-        <Tabs defaultValue="pipeline">
-          <TabsList className="h-auto flex-wrap">
-            {[["pipeline", "Pipeline"], ["anotado", "Texto anotado"], ["tabelas", "Tabelas"], ["stats", "Estatísticas"], ["compara", "Regras × LLM"], ["avalia", "Avaliação"], ["llm", "Inspeção do LLM"], ["dic", "Dicionários"], ["export", "Exportar"]].map(([v, l]) => <TabsTrigger key={v} value={v}>{l}</TabsTrigger>)}
-          </TabsList>
-          <TabsContent value="pipeline"><Pipeline a={a} step={step} setStep={setStep} stepMode={stepMode} setStepMode={setStepMode} /></TabsContent>
-          <TabsContent value="anotado"><Annotated a={a} /></TabsContent>
-          <TabsContent value="tabelas"><Tables a={a} /></TabsContent>
-          <TabsContent value="stats"><Stats a={a} /></TabsContent>
-          <TabsContent value="compara"><Compare a={a} /></TabsContent>
-          <TabsContent value="avalia"><Evaluation /></TabsContent>
-          <TabsContent value="llm"><LlmInspect a={a} /></TabsContent>
-          <TabsContent value="dic"><Dictionaries onSaved={() => analyze(false)} /></TabsContent>
-          <TabsContent value="export"><Export a={a} /></TabsContent>
-        </Tabs>
-      )}
+      <Tabs defaultValue="pipeline">
+        <TabsList className="h-auto flex-wrap">
+          {[["pipeline", "Pipeline"], ["anotado", "Texto anotado"], ["tabelas", "Tabelas"], ["stats", "Estatísticas"], ["compara", "Regras × LLM"], ["avalia", "Avaliação"], ["llm", "Inspeção do LLM"], ["dic", "Dicionários"], ["export", "Exportar"]].map(([v, l]) => <TabsTrigger key={v} value={v}>{l}</TabsTrigger>)}
+        </TabsList>
+        {[["pipeline", a && <Pipeline a={a} step={step} setStep={setStep} stepMode={stepMode} setStepMode={setStepMode} />], ["anotado", a && <Annotated a={a} />], ["tabelas", a && <Tables a={a} />],
+          ["stats", a && <Stats a={a} />], ["compara", a && <Compare a={a} />], ["llm", a && <LlmInspect a={a} />], ["export", a && <Export a={a} />]].map(([v, node]: any) => (
+          <TabsContent key={v} value={v}>{node ?? (busy ? <Skeleton className="h-96" /> : <Empty title="Escolha uma fonte de texto e clique em Analisar" icon={<FlaskConical className="size-8" />} />)}</TabsContent>))}
+        <TabsContent value="avalia"><Evaluation /></TabsContent>
+        <TabsContent value="dic"><Dictionaries onSaved={() => (a ? analyze(false) : undefined)} /></TabsContent>
+      </Tabs>
     </div>
   );
 }
 
 /* ------------------------------------------------------------------------------------- Pipeline */
+const PHASES = [
+  { name: "Entrada", ids: [1] }, { name: "Limpeza", ids: [2, 3] }, { name: "Linguística", ids: [4, 5, 6, 7] },
+  { name: "Extração", ids: [8, 9] }, { name: "Decisão", ids: [10, 11, 12] },
+];
 function Pipeline({ a, step, setStep, stepMode, setStepMode }: any) {
   const stages: any[] = a.stages;
   const st = stages[step];
   const [raw, setRaw] = useState(false);
   const visible = stepMode ? step : stages.length - 1;
+  const [playing, setPlaying] = useState(false);
+  useEffect(() => {
+    if (!playing) return;
+    if (step >= stages.length - 1) { setPlaying(false); return; }
+    const t = setTimeout(() => setStep(step + 1), 1800);
+    return () => clearTimeout(t);
+  }, [playing, step, stages.length, setStep]);
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center gap-2">
         <Button size="sm" variant={stepMode ? "default" : "outline"} onClick={() => { setStepMode(!stepMode); setStep(0); }}>{stepMode ? "Modo passo a passo: ligado" : "Modo passo a passo"}</Button>
+        <Button size="sm" variant={playing ? "accent" : "outline"} onClick={() => { if (!playing) { setStepMode(true); if (step >= stages.length - 1) setStep(0); } setPlaying(!playing); }}>{playing ? <><Pause /> Pausar</> : <><PlayCircle /> Reproduzir</>}</Button>
         <Button size="icon" variant="outline" disabled={step === 0} onClick={() => setStep(step - 1)} aria-label="voltar"><ChevronLeft /></Button>
         <Button size="icon" variant="outline" disabled={step === stages.length - 1} onClick={() => setStep(step + 1)} aria-label="avançar"><ChevronRight /></Button>
         <span className="text-sm text-muted-foreground">Etapa {step + 1} de {stages.length} · tempo total {a.timing.total_ms} ms</span>
       </div>
-      <div className="flex flex-wrap items-center gap-1.5">
-        {stages.map((s, i) => (
-          <div key={s.id} className="flex items-center gap-1.5">
-            <button onClick={() => setStep(i)} style={{ animationDelay: `${i * 90}ms` }} disabled={stepMode && i > step + 0 && false}
-              className={cn("step-in rounded-lg border px-3 py-2 text-left transition-all", i === step ? "border-primary bg-primary text-primary-foreground shadow-soft" : "bg-card hover:border-primary", stepMode && i > visible && "opacity-30")}>
-              <div className="text-[10px] opacity-70">{s.index}</div><div className="text-xs font-medium">{s.short}</div><div className="font-mono text-[10px] opacity-70">{s.ms} ms</div>
-            </button>
-            {i < stages.length - 1 && <span className="text-muted-foreground">→</span>}
+      <div className="flex flex-wrap items-stretch gap-3">
+        {PHASES.map((ph) => (
+          <div key={ph.name} className="rounded-lg border border-dashed p-2">
+            <div className="mb-1.5 px-1 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">{ph.name}</div>
+            <div className="flex items-center gap-1.5">
+              {ph.ids.map((n, k) => { const i = n - 1; const s = stages[i]; if (!s) return null; return (
+                <div key={s.id} className="flex items-center gap-1.5">
+                  <button onClick={() => { setPlaying(false); setStep(i); }} style={{ animationDelay: `${i * 90}ms` }}
+                    className={cn("step-in rounded-lg border px-3 py-2 text-left transition-all", i === step ? "border-primary bg-primary text-primary-foreground shadow-soft" : "bg-card hover:border-primary", stepMode && i > visible && "opacity-30")}>
+                    <div className="text-[10px] opacity-70">{s.index}</div><div className="text-xs font-medium">{s.short}</div><div className="font-mono text-[10px] opacity-70">{s.ms} ms</div>
+                  </button>
+                  {k < ph.ids.length - 1 && <span className="text-muted-foreground">→</span>}
+                </div>); })}
+            </div>
           </div>))}
       </div>
       <div className="grid gap-4 lg:grid-cols-[22rem_1fr]">
@@ -276,14 +288,30 @@ function Evaluation() {
   const [busy, setBusy] = useState(false);
   const [minConf, setMinConf] = useState(0);
   const [which, setWhich] = useState("rules");
-  const run = async () => { setBusy(true); try { setEv(await api.post("/lab/evaluate", { min_conf: minConf })); } catch (e: any) { toast.error(e.message); } finally { setBusy(false); } };
+  const [dataset, setDataset] = useState("gold");
+  const [sets, setSets] = useState<any[]>([]);
+  const { status } = useApp();
+  useEffect(() => { api.get("/lab/datasets").then(setSets).catch(() => {}); }, []);
+  const cur = sets.find((s) => s.id === dataset);
+  const run = async () => {
+    if (status?.llm_enabled) {
+      // cada transcrição = 1 chamada ao LLM (~2,5 mil tokens de entrada e ~0,5 mil de saída)
+      const n = cur?.n ?? 10, p = status.prices ?? { in: 4, out: 20 };
+      const est = (n * (2500 * p.in + 500 * p.out)) / 1e6;
+      if (!window.confirm(`A avaliação chamará o LLM ${n} vezes (modelo ${status.model}).\nCusto estimado: ~US$ ${est.toFixed(3)}.\nContinuar?`)) return;
+    }
+    setBusy(true);
+    try { setEv(await api.post("/lab/evaluate", { min_conf: minConf, dataset })); } catch (e: any) { toast.error(e.message); } finally { setBusy(false); }
+  };
   const ap = ev?.approaches?.[which];
+  const LABELS: Record<string, string> = { gold: "Gold standard (desenvolvimento)", holdout: "Validação (usada para corrigir regras)", blind: "Conjunto cego (medição única)" };
   return (
     <div className="space-y-4">
       <Card><CardContent className="flex flex-wrap items-center gap-3 p-4">
         <Button onClick={run} disabled={busy}><Play /> {busy ? "Avaliando…" : "Rodar avaliação"}</Button>
+        <label className="flex items-center gap-2 text-sm">Conjunto <Select value={dataset} onChange={(e) => { setDataset(e.target.value); setEv(null); }}>{(sets.length ? sets : [{ id: "gold", n: 10 }]).map((s) => <option key={s.id} value={s.id}>{LABELS[s.id] ?? s.id} — {s.n} transcrições</option>)}</Select></label>
         <label className="flex items-center gap-2 text-sm">Confiança mínima <Select value={minConf} onChange={(e) => setMinConf(Number(e.target.value))}>{[0, 0.5, 0.6, 0.7, 0.8].map((v) => <option key={v} value={v}>{v}</option>)}</Select></label>
-        <span className="text-xs text-muted-foreground">10 transcrições fictícias anotadas à mão (gold standard). Gold e regras foram escritos pelo mesmo autor: leia o F1 como indicativo, não como medida de generalização.</span>
+        <p className="basis-full text-xs text-muted-foreground">{cur?.description} <b>Como ler:</b> o gold foi escrito junto com as regras (otimista); a validação serviu para corrigir erros (também otimista); só o conjunto cego estima a generalização.</p>
       </CardContent></Card>
       {ev && (
         <>

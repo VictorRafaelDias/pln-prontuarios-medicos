@@ -104,6 +104,7 @@ function Editor({ sid }: { sid: number }) {
       const res = await api.post("/nlp/process", { utterances: list, mode, confirmed, llm_fields: llmRef.current, use_llm: useLlm, previous_session: sess.previous ? { eva: sess.previous.eva, summary: sess.previous.summary } : null });
       if (my !== reqRef.current) return;
       if (res.llm_fields) llmRef.current = res.llm_fields;
+      if (res.llm?.error) toast.warning(`LLM indisponível (${res.llm.error}). Continuando só com o PLN clássico.`, { id: "llm-err" });
       const stamp = Date.now();
       const changed: Record<string, number> = {};
       setForm((prev) => {

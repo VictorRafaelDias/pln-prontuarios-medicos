@@ -40,14 +40,15 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="Prontuário Qi", version="1.0.0", lifespan=lifespan)
-app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
+app.add_middleware(CORSMiddleware, allow_origins=[], allow_origin_regex=r"^https?://(localhost|127\.0\.0\.1)(:\d+)?$", allow_methods=["*"], allow_headers=["*"])
 app.include_router(lab_router, prefix="/api/lab")
 
 
 def api_status(s: Session) -> dict:
     st = llm_mod.settings()
     return {"llm_enabled": st["api_key_set"], "model": st["model"] if st["api_key_set"] else None, "effort": st["effort"],
-            "badge": "Híbrido (PLN + LLM)" if st["api_key_set"] else "Somente PLN clássico", "spacy": spacy_loader.model_info(),
+            "badge": "Híbrido (PLN + LLM)" if st["api_key_set"] else "Somente PLN clássico",
+            "prices": {"in": st["price_in"], "out": st["price_out"]}, "spacy": spacy_loader.model_info(),
             "settings": all_settings(s)}
 
 

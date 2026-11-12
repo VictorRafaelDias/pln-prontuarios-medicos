@@ -14,7 +14,10 @@
         "dolorido",
         "dolorida",
         "doloroso",
-        "dolorosa"
+        "dolorosa",
+        "doem",
+        "doeram",
+        "doendo muito"
       ],
       "attrs": {
         "tema": "dor"
@@ -107,7 +110,13 @@
         "acordo muito cansado",
         "acordo cansado",
         "demoro para dormir",
-        "demoro a dormir"
+        "demoro a dormir",
+        "acordo toda noite",
+        "acordo durante a noite",
+        "não durmo direito",
+        "não durmo bem",
+        "durmo pouco",
+        "sono fragmentado"
       ],
       "attrs": {
         "tema": "sono"
@@ -245,7 +254,11 @@
         "constipado",
         "constipada",
         "intestino travado",
-        "intestino preguiçoso"
+        "intestino preguiçoso",
+        "fica preso",
+        "fico preso",
+        "fica presa",
+        "fico presa"
       ],
       "attrs": {
         "tema": "intestino"

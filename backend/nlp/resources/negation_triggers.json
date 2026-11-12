@@ -1,95 +1,331 @@
 {
-  "_doc": "Gatilhos do algoritmo estilo NegEx adaptado ao português. 'pre' nega as entidades À DIREITA (dentro da janela); 'post' nega as entidades À ESQUERDA; 'pseudo' são expressões que PARECEM gatilhos mas não negam; 'termination' encerra o escopo; 'uncertainty' reduz a confiança (factor); 'former' marca estado passado (ex-hábito/ex-condição).",
+  "_doc": "Gatilhos do algoritmo estilo NegEx adaptado ao português. 'pre' nega as entidades À DIREITA (dentro da janela); 'post' nega as entidades À ESQUERDA; 'pseudo' são expressões que PARECEM gatilhos mas não negam; 'termination' encerra o escopo; 'uncertainty' reduz a confiança (factor); 'former' marca estado passado (ex-hábito/ex-condição). 'former_post' marca estado passado das entidades À ESQUERDA (\"trombose que eu tive\").",
   "window": 6,
   "pre": [
-    {"text": "não", "window": 6},
-    {"text": "nunca", "window": 6},
-    {"text": "nega", "window": 8},
-    {"text": "negou", "window": 8},
-    {"text": "negam", "window": 8},
-    {"text": "sem", "window": 5},
-    {"text": "nenhum", "window": 5},
-    {"text": "nenhuma", "window": 5},
-    {"text": "jamais", "window": 6},
-    {"text": "nem", "window": 5},
-    {"text": "ausência de", "window": 5},
-    {"text": "isento de", "window": 5},
-    {"text": "isenta de", "window": 5},
-    {"text": "descarta", "window": 5},
-    {"text": "ninguém", "window": 5}
+    {
+      "text": "não",
+      "window": 6
+    },
+    {
+      "text": "nunca",
+      "window": 6
+    },
+    {
+      "text": "nega",
+      "window": 8
+    },
+    {
+      "text": "negou",
+      "window": 8
+    },
+    {
+      "text": "negam",
+      "window": 8
+    },
+    {
+      "text": "sem",
+      "window": 5
+    },
+    {
+      "text": "nenhum",
+      "window": 5
+    },
+    {
+      "text": "nenhuma",
+      "window": 5
+    },
+    {
+      "text": "jamais",
+      "window": 6
+    },
+    {
+      "text": "nem",
+      "window": 5
+    },
+    {
+      "text": "ausência de",
+      "window": 5
+    },
+    {
+      "text": "isento de",
+      "window": 5
+    },
+    {
+      "text": "isenta de",
+      "window": 5
+    },
+    {
+      "text": "descarta",
+      "window": 5
+    },
+    {
+      "text": "ninguém",
+      "window": 5
+    }
   ],
   "post": [
-    {"text": "ausente", "window": 3},
-    {"text": "descartado", "window": 3},
-    {"text": "descartada", "window": 3},
-    {"text": "negativo", "window": 3},
-    {"text": "negativa", "window": 3}
+    {
+      "text": "ausente",
+      "window": 3
+    },
+    {
+      "text": "descartado",
+      "window": 3
+    },
+    {
+      "text": "descartada",
+      "window": 3
+    },
+    {
+      "text": "negativo",
+      "window": 3
+    },
+    {
+      "text": "negativa",
+      "window": 3
+    }
   ],
   "pseudo": [
-    {"text": "não só"},
-    {"text": "não apenas"},
-    {"text": "não somente"},
-    {"text": "sem dúvida"},
-    {"text": "não necessariamente"},
-    {"text": "não deixa de"},
-    {"text": "não sei se"},
-    {"text": "não lembro se"},
-    {"text": "não tenho certeza"},
-    {"text": "sem falar"}
+    {
+      "text": "não só"
+    },
+    {
+      "text": "não apenas"
+    },
+    {
+      "text": "não somente"
+    },
+    {
+      "text": "sem dúvida"
+    },
+    {
+      "text": "não necessariamente"
+    },
+    {
+      "text": "não deixa de"
+    },
+    {
+      "text": "não sei se"
+    },
+    {
+      "text": "não lembro se"
+    },
+    {
+      "text": "não tenho certeza"
+    },
+    {
+      "text": "sem falar"
+    }
   ],
   "termination": [
-    {"text": "mas"},
-    {"text": "porém"},
-    {"text": "contudo"},
-    {"text": "todavia"},
-    {"text": "entretanto"},
-    {"text": "exceto"},
-    {"text": "só que"},
-    {"text": "apesar"},
-    {"text": "embora"},
-    {"text": "e sim"},
-    {"text": "porque"},
-    {"text": "pois"},
-    {"text": "que"}
+    {
+      "text": "mas"
+    },
+    {
+      "text": "porém"
+    },
+    {
+      "text": "contudo"
+    },
+    {
+      "text": "todavia"
+    },
+    {
+      "text": "entretanto"
+    },
+    {
+      "text": "exceto"
+    },
+    {
+      "text": "só que"
+    },
+    {
+      "text": "apesar"
+    },
+    {
+      "text": "embora"
+    },
+    {
+      "text": "e sim"
+    },
+    {
+      "text": "porque"
+    },
+    {
+      "text": "pois"
+    },
+    {
+      "text": "que"
+    }
   ],
   "uncertainty": [
-    {"text": "acho que", "factor": 0.7, "window": 8},
-    {"text": "talvez", "factor": 0.6, "window": 8},
-    {"text": "pode ser", "factor": 0.65, "window": 8},
-    {"text": "parece que", "factor": 0.7, "window": 8},
-    {"text": "provavelmente", "factor": 0.8, "window": 8},
-    {"text": "possivelmente", "factor": 0.7, "window": 8},
-    {"text": "será que", "factor": 0.6, "window": 8},
-    {"text": "creio", "factor": 0.7, "window": 8},
-    {"text": "imagino que", "factor": 0.7, "window": 8},
-    {"text": "sei lá", "factor": 0.5, "window": 8},
-    {"text": "não sei se", "factor": 0.5, "window": 8},
-    {"text": "não lembro se", "factor": 0.5, "window": 8},
-    {"text": "não tenho certeza", "factor": 0.5, "window": 8},
-    {"text": "se não me engano", "factor": 0.7, "window": 8},
-    {"text": "às vezes", "factor": 0.8, "window": 8},
-    {"text": "de vez em quando", "factor": 0.8, "window": 8},
-    {"text": "mais ou menos", "factor": 0.8, "window": 6},
-    {"text": "meio que", "factor": 0.85, "window": 6},
-    {"text": "quase", "factor": 0.9, "window": 4},
-    {"text": "eventualmente", "factor": 0.8, "window": 6}
+    {
+      "text": "acho que",
+      "factor": 0.7,
+      "window": 8
+    },
+    {
+      "text": "talvez",
+      "factor": 0.6,
+      "window": 8
+    },
+    {
+      "text": "pode ser",
+      "factor": 0.65,
+      "window": 8
+    },
+    {
+      "text": "parece que",
+      "factor": 0.7,
+      "window": 8
+    },
+    {
+      "text": "provavelmente",
+      "factor": 0.8,
+      "window": 8
+    },
+    {
+      "text": "possivelmente",
+      "factor": 0.7,
+      "window": 8
+    },
+    {
+      "text": "será que",
+      "factor": 0.6,
+      "window": 8
+    },
+    {
+      "text": "creio",
+      "factor": 0.7,
+      "window": 8
+    },
+    {
+      "text": "imagino que",
+      "factor": 0.7,
+      "window": 8
+    },
+    {
+      "text": "sei lá",
+      "factor": 0.5,
+      "window": 8
+    },
+    {
+      "text": "não sei se",
+      "factor": 0.5,
+      "window": 8
+    },
+    {
+      "text": "não lembro se",
+      "factor": 0.5,
+      "window": 8
+    },
+    {
+      "text": "não tenho certeza",
+      "factor": 0.5,
+      "window": 8
+    },
+    {
+      "text": "se não me engano",
+      "factor": 0.7,
+      "window": 8
+    },
+    {
+      "text": "às vezes",
+      "factor": 0.8,
+      "window": 8
+    },
+    {
+      "text": "de vez em quando",
+      "factor": 0.8,
+      "window": 8
+    },
+    {
+      "text": "mais ou menos",
+      "factor": 0.8,
+      "window": 6
+    },
+    {
+      "text": "meio que",
+      "factor": 0.85,
+      "window": 6
+    },
+    {
+      "text": "quase",
+      "factor": 0.9,
+      "window": 4
+    },
+    {
+      "text": "eventualmente",
+      "factor": 0.8,
+      "window": 6
+    }
   ],
   "former": [
-    {"text": "parei de", "window": 6},
-    {"text": "deixei de", "window": 6},
-    {"text": "larguei", "window": 6},
-    {"text": "abandonei", "window": 6},
-    {"text": "já fumei", "window": 4},
-    {"text": "já tive", "window": 6},
-    {"text": "já tomei", "window": 6},
-    {"text": "já bebi", "window": 4},
-    {"text": "já usei", "window": 6},
-    {"text": "antigamente", "window": 8},
-    {"text": "no passado", "window": 8},
-    {"text": "fui fumante", "window": 3},
-    {"text": "fui fumadora", "window": 3}
+    {
+      "text": "parei de",
+      "window": 6
+    },
+    {
+      "text": "deixei de",
+      "window": 6
+    },
+    {
+      "text": "larguei",
+      "window": 6
+    },
+    {
+      "text": "abandonei",
+      "window": 6
+    },
+    {
+      "text": "já fumei",
+      "window": 4
+    },
+    {
+      "text": "já tive",
+      "window": 6
+    },
+    {
+      "text": "já tomei",
+      "window": 6
+    },
+    {
+      "text": "já bebi",
+      "window": 4
+    },
+    {
+      "text": "já usei",
+      "window": 6
+    },
+    {
+      "text": "antigamente",
+      "window": 8
+    },
+    {
+      "text": "no passado",
+      "window": 8
+    },
+    {
+      "text": "fui fumante",
+      "window": 3
+    },
+    {
+      "text": "fui fumadora",
+      "window": 3
+    }
   ],
   "former_post": [
-    {"text": "mais", "max_gap": 3}
+    {
+      "text": "que eu tive",
+      "window": 5
+    },
+    {
+      "text": "que tive",
+      "window": 5
+    },
+    {
+      "text": "que eu tinha",
+      "window": 5
+    }
   ]
 }

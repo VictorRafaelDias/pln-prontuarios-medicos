@@ -139,7 +139,7 @@ def _dose(m):
 
 # ---------------------------------------------------------------- Tempo
 @rule("tempo_ha", "TEMPO",
-      rf"(?<!\w)(?:h[aá]|faz|fazem|fazia|tem|havia)\s+(?:(?P<q>mais\s+de|cerca\s+de|quase|aproximadamente|uns|umas)\s+)?(?P<n>\d+(?:[.,]\d+)?)\s*(?P<u>{TIME_UNITS})(?!\w)")
+      rf"(?<!\w)(?:h[aá]|faz|fazem|fazia|tem|havia)\s+(?:(?P<q>mais\s+ou\s+menos|mais\s+de|cerca\s+de|quase|aproximadamente|uns|umas)\s+)?(?P<n>\d+(?:[.,]\d+)?)\s*(?P<u>{TIME_UNITS})(?!\w)")
 def _t_ha(m):
     return {"kind": "ago", "qty": _f(m.group("n")), "unit": _unit(m.group("u")), "approx": (m.group("q") or "").lower() or None}
 
@@ -171,7 +171,7 @@ def _t_desde_fase(m):
 
 
 @rule("tempo_duracao", "TEMPO",
-      rf"(?<!\w)(?:por|durante)\s+(?:(?P<q>mais\s+de|cerca\s+de|uns|umas|quase|aproximadamente)\s+)?(?P<n>\d+(?:[.,]\d+)?)\s*(?P<u>{TIME_UNITS})(?!\w)")
+      rf"(?<!\w)(?:por|durante)\s+(?:(?P<q>mais\s+ou\s+menos|mais\s+de|cerca\s+de|uns|umas|quase|aproximadamente)\s+)?(?P<n>\d+(?:[.,]\d+)?)\s*(?P<u>{TIME_UNITS})(?!\w)")
 def _t_dur(m):
     return {"kind": "duration", "qty": _f(m.group("n")), "unit": _unit(m.group("u")), "approx": (m.group("q") or "").lower() or None}
 

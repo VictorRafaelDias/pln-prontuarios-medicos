@@ -1,0 +1,130 @@
+{
+  "version": 1,
+  "description": "Conjunto de VALIDAÇÃO CEGA: 5 transcrições fictícias escritas e anotadas DEPOIS das regras do gold principal e sem ajustar as regras a elas na primeira medição. Serve para estimar generalização.",
+  "transcripts": [
+    {"id": "V01", "title": "Ombro — tendinite, tabagista, fala informal", "mode": "anamnese",
+     "utterances": [
+       {"speaker": "profissional", "text": "Bom dia, seu Rogério. Como posso ajudar?"},
+       {"speaker": "paciente", "text": "Bom dia. É o ombro direito, doutora, uma dor que pega quando eu levanto o braço, tipo uma pontada. Começou há mais ou menos quatro meses."},
+       {"speaker": "profissional", "text": "De zero a dez?"},
+       {"speaker": "paciente", "text": "Uns sete."},
+       {"speaker": "profissional", "text": "Piora quando?"},
+       {"speaker": "paciente", "text": "Piora quando eu carrego peso e à noite, quando deito em cima dele. Melhora com compressa quente."},
+       {"speaker": "profissional", "text": "Algum problema de saúde?"},
+       {"speaker": "paciente", "text": "Pressão alta, controlada com enalapril vinte miligramas. Fiz cirurgia de hérnia em 2012."},
+       {"speaker": "profissional", "text": "Fuma?"},
+       {"speaker": "paciente", "text": "Fumo, uns cinco cigarros por dia, faz vinte anos."},
+       {"speaker": "profissional", "text": "E bebida?"},
+       {"speaker": "paciente", "text": "Cerveja no fim de semana."},
+       {"speaker": "profissional", "text": "Quantas horas dorme?"},
+       {"speaker": "paciente", "text": "Durmo umas sete horas, sem problema."},
+       {"speaker": "profissional", "text": "Toma bastante água?"},
+       {"speaker": "paciente", "text": "Tomo um litro e meio por dia."},
+       {"speaker": "profissional", "text": "Estresse de zero a dez?"},
+       {"speaker": "paciente", "text": "Seis."},
+       {"speaker": "profissional", "text": "Língua rosada com saburra branca fina, pulso tenso. Estagnação de qi do fígado. Vou usar IG15, TA14, ID11 e VB34, com eletroacupuntura, trinta minutos, uma vez por semana, umas oito sessões."}
+     ],
+     "gold": {
+       "queixa.descricao": "Dor no ombro direito", "queixa.localizacao": ["ombro_d"], "queixa.eva": 7, "queixa.inicio": "Há 4 meses",
+       "queixa.tipo_dor": ["pontada"], "queixa.piora": ["Carregar peso", "Deitar em cima do ombro"], "queixa.melhora": ["Compressa quente"],
+       "queixa.horario_pior": "noite", "saude.doencas": ["Hipertensão"], "saude.medicamentos": ["Enalapril 20 mg"],
+       "saude.cirurgias": ["Cirurgia de hérnia (2012)"], "habitos.tabagismo": "atual", "habitos.cigarros_dia": 5, "habitos.anos_fumo": 20,
+       "habitos.etilismo": "social", "habitos.sono": "Dorme 7 horas, sem problema", "habitos.agua": "1,5 litro por dia", "habitos.estresse": 6,
+       "mtc.lingua": "Rosada com saburra branca fina", "mtc.pulso": "Tenso", "mtc.padroes": ["Estagnação de qi do fígado"],
+       "soap.p_pontos": ["IG15", "TA14", "ID11", "VB34"], "plano.tecnicas": ["eletroacupuntura"], "soap.p_tecnica": ["eletroacupuntura"],
+       "soap.p_tempo": 30, "plano.frequencia": "1 vez por semana", "plano.sessoes": 8
+     }},
+    {"id": "V02", "title": "Joelhos — anticoagulante, diabética, ex-fumante", "mode": "anamnese",
+     "utterances": [
+       {"speaker": "profissional", "text": "Dona Sônia, o que a traz?"},
+       {"speaker": "paciente", "text": "Meus joelhos, os dois, doem muito pra descer escada. Já faz uns dois anos."},
+       {"speaker": "profissional", "text": "Qual a nota da dor?"},
+       {"speaker": "paciente", "text": "Oito."},
+       {"speaker": "profissional", "text": "Que tipo de dor é?"},
+       {"speaker": "paciente", "text": "Uma dor de peso e às vezes uma fisgada."},
+       {"speaker": "profissional", "text": "A senhora toma algum anticoagulante?"},
+       {"speaker": "paciente", "text": "Tomo varfarina, por causa de uma trombose que eu tive."},
+       {"speaker": "profissional", "text": "Tem marcapasso?"},
+       {"speaker": "paciente", "text": "Não, graças a Deus."},
+       {"speaker": "profissional", "text": "Diabetes?"},
+       {"speaker": "paciente", "text": "Tenho, diabetes tipo dois, tomo metformina."},
+       {"speaker": "profissional", "text": "Fuma ou bebe?"},
+       {"speaker": "paciente", "text": "Parei de fumar há trinta anos. Bebida eu nunca gostei."},
+       {"speaker": "profissional", "text": "E o intestino?"},
+       {"speaker": "paciente", "text": "Fica preso, uso um laxante às vezes."},
+       {"speaker": "profissional", "text": "O sono?"},
+       {"speaker": "paciente", "text": "Acordo toda noite umas três vezes."},
+       {"speaker": "profissional", "text": "Vou usar E36, BP6, B23 e VB34, auriculoterapia também, só não vou usar eletroacupuntura por causa da varfarina."}
+     ],
+     "gold": {
+       "queixa.descricao": "Dor nos joelhos", "queixa.localizacao": ["joelho_d", "joelho_e"], "queixa.inicio": "Há 2 anos", "queixa.eva": 8,
+       "queixa.tipo_dor": ["peso", "pontada"], "contra.anticoagulantes": true, "contra.marcapasso": false, "contra.diabetes": true,
+       "saude.doencas": ["Diabetes", "Trombose"], "saude.medicamentos": ["Varfarina", "Metformina"], "habitos.tabagismo": "ex",
+       "habitos.etilismo": "nunca", "habitos.intestino": "Fica preso, usa laxante às vezes", "habitos.sono": "Acorda toda noite umas 3 vezes",
+       "soap.p_pontos": ["E36", "BP6", "B23", "VB34"], "plano.tecnicas": ["sistemica", "auriculoterapia"], "soap.p_tecnica": ["sistemica", "auriculoterapia"]
+     }},
+    {"id": "V03", "title": "SOAP — piora após esforço", "mode": "soap", "previous": {"eva": 5},
+     "utterances": [
+       {"speaker": "paciente", "text": "Doutor, a dor piorou depois que eu carreguei a mudança. Está nota nove agora."},
+       {"speaker": "paciente", "text": "E o formigamento na mão esquerda voltou."},
+       {"speaker": "profissional", "text": "Vou aplicar ventosas no trapézio e usar VB21, ID11, TA15, IG4 e E36. Língua vermelha com saburra amarela, pulso rápido. Calor no fígado."},
+       {"speaker": "profissional", "text": "Vinte minutos de agulhas. Sem intercorrências. Oriento evitar carregar peso e fazer compressa morna. Volte em quatro dias."}
+     ],
+     "gold": {
+       "soap.s_relato": "A dor piorou depois que eu carreguei a mudança. Está nota 9 agora. O formigamento na mão esquerda voltou",
+       "soap.s_eva": 9, "soap.a_evolucao": "Piora relatada pelo paciente", "soap.o_lingua": "Vermelha com saburra amarela", "soap.o_pulso": "Rápido",
+       "soap.a_padrao": "Calor no fígado", "soap.p_pontos": ["VB21", "ID11", "TA15", "IG4", "E36"], "soap.p_tecnica": ["ventosa", "sistemica"],
+       "soap.p_tempo": 20, "soap.p_reacoes": "Sem reações adversas", "soap.p_orientacoes": "Evitar carregar peso e fazer compressa morna",
+       "soap.p_proxima": "Volte em 4 dias"
+     }},
+    {"id": "V04", "title": "Ansiedade — alergias, medicação, medo de agulha", "mode": "anamnese",
+     "utterances": [
+       {"speaker": "profissional", "text": "Oi Camila. Conta pra mim."},
+       {"speaker": "paciente", "text": "Ando muito ansiosa e com palpitação, acho que é por causa do trabalho. Não durmo direito há uns seis meses."},
+       {"speaker": "profissional", "text": "De zero a dez, o estresse?"},
+       {"speaker": "paciente", "text": "Nove, talvez dez."},
+       {"speaker": "profissional", "text": "Está grávida?"},
+       {"speaker": "paciente", "text": "Não, mas estou tentando engravidar."},
+       {"speaker": "profissional", "text": "Tem alergia a alguma coisa?"},
+       {"speaker": "paciente", "text": "Alergia a níquel e a camarão."},
+       {"speaker": "profissional", "text": "Medicamentos?"},
+       {"speaker": "paciente", "text": "Tomo sertralina cinquenta miligramas e melatonina quando não consigo dormir."},
+       {"speaker": "profissional", "text": "Menstruação regular?"},
+       {"speaker": "paciente", "text": "Um pouco irregular, atrasa quase toda vez."},
+       {"speaker": "profissional", "text": "Medo de agulha?"},
+       {"speaker": "paciente", "text": "Morro de medo."},
+       {"speaker": "profissional", "text": "Vamos de auriculoterapia com sementes, uma vez por semana, dez sessões."}
+     ],
+     "gold": {
+       "queixa.descricao": "Ansiedade", "secundarias.lista": ["Palpitação"], "habitos.sono": "Não durmo direito há 6 meses", "habitos.estresse": 9,
+       "contra.gestacao": false, "saude.alergias": ["Níquel", "Camarão"], "saude.medicamentos": ["Sertralina 50 mg", "Melatonina"],
+       "saude.ciclo": "Um pouco irregular, atrasa quase toda vez", "contra.medo_agulha": true, "plano.tecnicas": ["auriculoterapia"],
+       "soap.p_tecnica": ["auriculoterapia"], "plano.frequencia": "1 vez por semana", "plano.sessoes": 10
+     }},
+    {"id": "V05", "title": "Texto digitado, sem acentos e com siglas", "mode": "anamnese",
+     "utterances": [
+       {"speaker": "profissional", "text": "queixa principal"},
+       {"speaker": "paciente", "text": "dor lombar q desce pra perna esquerda, formigando, tem uns 2 anos. nota 8. piora qd fico em pe e de manha"},
+       {"speaker": "profissional", "text": "fuma?"},
+       {"speaker": "paciente", "text": "fumo 1 maco por dia ha 15 anos"},
+       {"speaker": "profissional", "text": "bebe?"},
+       {"speaker": "paciente", "text": "so cerveja no sabado"},
+       {"speaker": "profissional", "text": "doencas?"},
+       {"speaker": "paciente", "text": "DM2 e HAS, tomo glifage e losartana 50mg"},
+       {"speaker": "profissional", "text": "cirurgias?"},
+       {"speaker": "paciente", "text": "nenhuma"},
+       {"speaker": "profissional", "text": "exercicio fisico?"},
+       {"speaker": "paciente", "text": "sou pedreiro, trabalho pesado, mas nao treino"},
+       {"speaker": "profissional", "text": "lingua palida e inchada com marcas de dentes, pulso fino e escorregadio. Umidade e deficiência de qi do baço. pontos B23, B25, B40, VB30 e BP9, moxa, 25 min."}
+     ],
+     "gold": {
+       "queixa.descricao": "Dor lombar", "queixa.localizacao": ["lombar", "perna_e"], "queixa.inicio": "Há 2 anos", "queixa.eva": 8,
+       "queixa.tipo_dor": ["formigamento", "irradiada"], "queixa.piora": ["Ficar em pé"], "queixa.horario_pior": "manhã", "habitos.tabagismo": "atual",
+       "habitos.cigarros_dia": 20, "habitos.anos_fumo": 15, "habitos.etilismo": "social", "saude.doencas": ["Diabetes", "Hipertensão"],
+       "contra.diabetes": true, "saude.medicamentos": ["Metformina (Glifage)", "Losartana 50 mg"], "habitos.atividade_fisica": "Sedentário",
+       "mtc.lingua": "Pálida e inchada com marcas de dentes", "mtc.pulso": "Fino e escorregadio",
+       "mtc.padroes": ["Umidade", "Deficiência de qi do baço"], "soap.p_pontos": ["B23", "B25", "B40", "VB30", "BP9"],
+       "plano.tecnicas": ["moxabustao"], "soap.p_tecnica": ["moxabustao"], "soap.p_tempo": 25
+     }}
+  ]
+}
